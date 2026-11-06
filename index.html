@@ -3,624 +3,337 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Grade Calculator & Profiles</title>
+  <title>IHS Final Average Calculator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-    html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000000; color: #f8fafc; }
-    body.modal-open { overflow: hidden; height: 100vh; position: fixed; width: 100%; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; min-height: 100%; overflow-x: hidden; touch-action: manipulation; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040406; color: #f3f4f6; }
     .font-syne { font-family: 'Syne', sans-serif; }
-    
-    @keyframes orb1 { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .25; } 50% { transform: translate3d(40px, 50px, 0) scale(1.25); opacity: .45; } }
-    @keyframes orb2 { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .2; } 50% { transform: translate3d(-40px, -50px, 0) scale(1.25); opacity: .4; } }
-    .orb-1 { animation: orb1 18s ease-in-out infinite; will-change: transform; } 
-    .orb-2 { animation: orb2 22s ease-in-out infinite reverse; will-change: transform; }
-
-    @keyframes rise { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: .5; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
-    .particle { position: absolute; border-radius: 50%; background: rgba(255,255,255,.6); pointer-events: none; }
-
-    @keyframes pop { from { opacity: 0; transform: scale(.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .animate-modal { animation: pop .3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-    .glass-card { 
-      background: linear-gradient(180deg, rgba(14, 14, 18, 0.98) 0%, rgba(2, 2, 4, 0.99) 100%); 
-      border: 1px solid rgba(255, 255, 255, 0.25); 
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.98), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-
-    .input-field { transition: border-color .2s ease, background-color .2s ease; background: rgba(6,6,9,.95); border: 1px solid rgba(255,255,255,.25); color: #fff; }
-    .input-field:focus { border-color: #fff; outline: none; background: rgba(18,18,24,1); box-shadow: 0 0 15px rgba(255,255,255,.12); }
-
-    .form-tab { transition: all .2s ease; background: #08080c; border: 1px solid rgba(255,255,255,.22); color: #d4d4d8; }
-    .form-tab.active { background: #fff; color: #000; border-color: #fff; font-weight: 800; box-shadow: 0 0 20px rgba(255,255,255,.35); }
-
-    @keyframes wave { 0% { transform: translateX(-100%) rotate(25deg); } 100% { transform: translateX(200%) rotate(25deg); } }
-    
-    /* Shimmering animations strictly for white interactive/action buttons */
-    .btn-wave { position: relative; overflow: hidden; background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 50%, #ffffff 100%); color: #000; box-shadow: 0 4px 25px rgba(255,255,255,.3); }
-    .btn-wave::after { content: ''; position: absolute; top: -50%; left: -50%; width: 60%; height: 200%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), rgba(255,255,255,.95), rgba(255,255,255,.6), transparent); transform: rotate(25deg); animation: wave 3.5s ease-in-out infinite; }
-
-    /* Static, clean, premium gradient cards for class selection with no waves/animations */
-    .btn-static-card { 
-      position: relative; 
-      background: linear-gradient(135deg, rgba(32, 32, 42, 0.98) 0%, rgba(8, 8, 12, 0.99) 50%, rgba(42, 42, 54, 0.98) 100%); 
-      border: 1px solid rgba(255, 255, 255, 0.35); 
-      transition: all 0.25s ease; 
-      box-shadow: 0 12px 35px rgba(0,0,0,0.9), inset 0 1px 2px rgba(255,255,255,0.25); 
-    }
-    .btn-static-card:hover { 
-      border-color: rgba(255, 255, 255, 0.7); 
-      transform: translateY(-2px); 
-      box-shadow: 0 16px 40px rgba(0,0,0,0.95), 0 0 25px rgba(255,255,255,.2); 
-    }
-
-    .view-enter { animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    .honor-roll-glow { border-color: rgba(251, 191, 36, 0.85) !important; background: linear-gradient(135deg, rgba(251, 191, 36, 0.22) 0%, rgba(4, 4, 6, 0.98) 100%) !important; box-shadow: 0 0 35px rgba(251, 191, 36, 0.25) !important; }
+    @keyframes flareGlow { 0%, 100% { opacity: 0.6; transform: rotate(-10deg) scale(1); } 50% { opacity: 0.85; transform: rotate(-8deg) scale(1.08); } }
+    @keyframes flareGlowAlt { 0%, 100% { opacity: 0.5; transform: rotate(12deg) scale(1); } 50% { opacity: 0.75; transform: rotate(14deg) scale(1.08); } }
+    .flare-streak-1 { position: fixed; top: -15%; left: -20%; width: 140%; height: 280px; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(160,160,160,0.03) 45%, transparent 80%); filter: blur(60px); pointer-events: none; z-index: 0; animation: flareGlow 14s ease-in-out infinite; }
+    .flare-streak-2 { position: fixed; bottom: -15%; right: -20%; width: 140%; height: 250px; background: linear-gradient(135deg, rgba(220,220,220,0.06) 0%, rgba(110,110,110,0.02) 50%, transparent 80%); filter: blur(60px); pointer-events: none; z-index: 0; animation: flareGlowAlt 16s ease-in-out infinite; }
+    .view-enter { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes modalPop { from { opacity: 0; transform: scale(0.94) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .animate-modal { animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes goldPulse { 0%, 100% { box-shadow: 0 0 25px rgba(251, 191, 36, 0.3), inset 0 0 12px rgba(251, 191, 36, 0.15); } 50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.55), inset 0 0 18px rgba(251, 191, 36, 0.25); } }
+    .honor-roll-glow { border-color: rgba(251, 191, 36, 0.65) !important; background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(16, 16, 22, 0.9) 60%, rgba(245, 158, 11, 0.1) 100%) !important; animation: goldPulse 3s ease-in-out infinite; }
+    .glass-card { background: linear-gradient(135deg, rgba(22, 22, 30, 0.85) 0%, rgba(12, 12, 16, 0.9) 100%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     .glass-card-interactive { cursor: pointer; }
-    .glass-card-interactive:active { transform: scale(0.985); }
+    .glass-card-interactive:hover { border-color: rgba(255, 255, 255, 0.25); transform: translateY(-3px); box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2); background: linear-gradient(135deg, rgba(32, 32, 44, 0.9) 0%, rgba(16, 16, 22, 0.9) 100%); }
+    .glass-card-interactive:active { background: rgba(38, 38, 50, 0.95); transform: translateY(0) scale(0.985); }
+    .input-field { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); padding-top: 0.6rem; padding-bottom: 0.6rem; line-height: 1.5; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
   </style>
 </head>
-<body class="min-h-screen w-full bg-[#000000] text-slate-100 flex flex-col justify-between items-center p-4 sm:p-6 relative overflow-x-hidden selection:bg-white selection:text-black">
+<body class="min-h-screen w-full bg-[#040406] text-slate-100 flex flex-col justify-between items-center p-4 sm:p-6 relative overflow-x-hidden selection:bg-slate-300 selection:text-black">
 
-  <div id="particles" class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-    <div class="orb-1 absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-gradient-to-br from-white/20 via-zinc-500/10 to-transparent rounded-full blur-[110px]"></div>
-    <div class="orb-2 absolute -bottom-24 -right-24 w-[30rem] h-[30rem] bg-gradient-to-tl from-white/15 via-zinc-600/10 to-transparent rounded-full blur-[110px]"></div>
-  </div>
+  <div class="flare-streak-1"></div>
+  <div class="flare-streak-2"></div>
 
-  <!-- Profile Authentication Screen Overlay -->
-  <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/98">
-    <div class="w-full max-w-sm z-20">
-      <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-4 animate-modal">
-        <div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-white/10 border border-white/20">
-          <button type="button" id="tab-signup-mode" onclick="switchAuthMode('signup')" class="btn-wave py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer">Sign Up</button>
-          <button type="button" id="tab-login-mode" onclick="switchAuthMode('login')" class="py-2 rounded-lg text-xs font-mono font-bold text-zinc-400 transition-all hover:text-white cursor-pointer">Log In</button>
-        </div>
-
+  <!-- What's New Pop-up Modal -->
+  <div id="whats-new-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="glass-card w-full max-w-sm rounded-2xl p-5 space-y-4 animate-modal border border-white/20 relative shadow-2xl overflow-hidden bg-[#0a0a0f]">
+      <div class="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-bl from-emerald-500/10 via-teal-500/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+      
+      <!-- Header with Version Badge & Close -->
+      <div class="flex items-center justify-between border-b border-white/10 pb-3 relative z-10">
         <div class="space-y-1">
-          <h1 id="auth-title" class="font-syne text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">Create Profile</h1>
-          <p id="auth-subtitle" class="text-xs text-zinc-300">Set up your username, password, and select your class.</p>
+          <div class="inline-block bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wider uppercase">
+            V11.0 UPDATE
+          </div>
+          <h3 class="font-syne text-2xl font-extrabold text-white tracking-tight">What's New?</h3>
+        </div>
+        <button onclick="closeWhatsNewModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Update Content List -->
+      <div class="space-y-3.5 relative z-10 max-h-[55vh] overflow-y-auto pr-1">
+        <!-- Item 1 -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-sm">✦</span>
+            <h4 class="font-syne text-xs font-bold text-white uppercase tracking-wider">New Classes Added</h4>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed pl-5">
+            Industrial and General tracks are now fully supported for 3rd and 4th forms with precise credit weights.
+          </p>
         </div>
 
-        <div class="space-y-3 pt-1">
-          <div class="space-y-1">
-            <label class="text-[10px] font-mono uppercase text-zinc-300 font-bold block">Username</label>
-            <input type="text" id="uname" maxlength="12" oninput="preventSpaces(this)" class="input-field w-full rounded-xl px-3.5 py-3 font-mono text-xs"/>
+        <!-- Item 2 -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-sm">✦</span>
+            <h4 class="font-syne text-xs font-bold text-white uppercase tracking-wider">Custom Setups</h4>
           </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed pl-5">
+            Build, save, and load your own personalized subject configurations directly into local storage.
+          </p>
+        </div>
 
-          <div class="space-y-1">
-            <label class="text-[10px] font-mono uppercase text-zinc-300 font-bold block">Password</label>
-            <div class="relative">
-              <input type="password" id="upass" maxlength="12" oninput="preventSpaces(this)" class="input-field w-full rounded-xl px-3.5 py-3 pr-10 font-mono text-xs"/>
-              <button type="button" onclick="togglePassVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-white text-xs font-mono cursor-pointer">👁</button>
-            </div>
+        <!-- Item 3 -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-sm">✦</span>
+            <h4 class="font-syne text-xs font-bold text-white uppercase tracking-wider">Improved Menu Design</h4>
           </div>
-
-          <div id="signup-fields" class="space-y-3">
-            <div class="space-y-1.5">
-              <label class="text-[10px] font-mono uppercase text-zinc-300 font-bold">Form Level</label>
-              <div class="grid grid-cols-4 gap-1.5" id="tabs">
-                <button type="button" onclick="setForm('1st')" class="form-tab py-2.5 rounded-xl text-xs font-mono cursor-pointer">1st</button>
-                <button type="button" onclick="setForm('2nd')" class="form-tab py-2.5 rounded-xl text-xs font-mono cursor-pointer">2nd</button>
-                <button type="button" onclick="setForm('3rd')" class="form-tab py-2.5 rounded-xl text-xs font-mono cursor-pointer">3rd</button>
-                <button type="button" onclick="setForm('4th')" class="form-tab py-2.5 rounded-xl text-xs font-mono cursor-pointer">4th</button>
-              </div>
-            </div>
-
-            <div id="class-box" class="space-y-1 hidden">
-              <label class="text-[10px] font-mono uppercase text-zinc-300 font-bold">Class</label>
-              <select id="uclass" class="input-field w-full rounded-xl px-3.5 py-3 font-mono text-xs"><option value="">Select Class...</option></select>
-            </div>
-          </div>
-
-          <div class="p-3 rounded-xl bg-white/[0.05] border border-white/12 text-[10px] text-zinc-300 leading-relaxed shadow-inner">
-            Profiles are used simply to keep track of student votes, feedback, and general statistics.
-          </div>
-
-          <button onclick="handleAuthAction()" id="auth-submit-btn" class="btn-wave w-full py-3.5 rounded-xl text-xs font-mono font-extrabold cursor-pointer">Register Profile</button>
+          <p class="text-[11px] text-slate-300 leading-relaxed pl-5">
+            Cleaned up the navigation so it's super fast to get around, with a much nicer look and feel overall.
+          </p>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Custom Alert Modal -->
-  <div id="custom-alert-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-black/95">
-    <div class="glass-card w-full max-w-sm rounded-2xl p-5 space-y-4 animate-modal border border-white/30 relative shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/15 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm"></div>
-          <h3 id="custom-alert-title" class="font-syne text-base font-extrabold text-white">Notice</h3>
-        </div>
-        <button onclick="closeCustomAlert()" class="text-slate-300 p-1 rounded-lg cursor-pointer hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      <!-- Action Button -->
+      <div class="pt-2 relative z-10">
+        <button onclick="closeWhatsNewModal()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 hover:from-emerald-300 hover:to-teal-400 text-xs font-mono text-black font-extrabold transition-all shadow-xl flex items-center justify-center gap-2 border border-emerald-300/50 active:scale-[0.98]">
+          <span>Got it</span>
+        </button>
       </div>
-      <p id="custom-alert-msg" class="text-xs text-slate-200 leading-relaxed py-1"></p>
-      <button onclick="closeCustomAlert()" class="btn-wave w-full py-3 rounded-xl text-xs font-mono font-extrabold cursor-pointer shadow-md">OK</button>
     </div>
   </div>
 
   <!-- Header -->
   <header class="w-full max-w-md flex items-center justify-between py-2 z-20 mb-4 shrink-0">
     <div class="flex items-center gap-3">
-      <button onclick="openPersonalProfileModal()" title="My Profile" class="w-11 h-11 rounded-xl bg-gradient-to-tr from-zinc-300 via-zinc-400 to-zinc-800 p-[1.5px] shadow-lg cursor-pointer hover:scale-105 transition-transform group">
-        <div class="w-full h-full bg-[#030305] rounded-[10.5px] flex items-center justify-center relative">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white group-hover:text-zinc-200 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-zinc-600 via-zinc-500 to-zinc-900 p-[1.5px] shadow-lg shadow-black/70">
+        <div class="w-full h-full bg-[#08080c] rounded-[10.5px] flex items-center justify-center relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-100" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/><path d="M3.8 12.88v4.24C3.8 19.38 7.47 21 12 21s8.2-1.62 8.2-3.88v-4.24l-8.2 4.47-8.2-4.47z"/>
           </svg>
         </div>
-      </button>
-      <div class="flex items-center gap-1.5 cursor-help" title="Total number of registered profiles">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-        <span id="live-profile-count" class="text-[10px] font-mono text-white font-bold">—</span>
+      </div>
+      <div class="flex flex-col pb-0.5">
+        <span class="font-syne font-extrabold tracking-tight text-white text-base leading-none">INDEPENDENCE HIGH</span>
+        <span class="text-[9px] font-mono tracking-widest text-slate-400 italic mt-1">"To Prepare for Life!"</span>
       </div>
     </div>
-    <div class="flex items-center gap-2">
-      <button onclick="loadModal(true)" title="Registered Profiles Directory" class="w-9 h-9 rounded-xl bg-white/10 border border-white/20 hover:border-white/40 flex items-center justify-center text-white transition-all cursor-pointer shadow-md">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-      </button>
-      <button onclick="logout()" title="Sign Out" class="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/35 hover:border-rose-500/60 flex items-center justify-center text-rose-300 transition-all cursor-pointer shadow-md">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      </button>
-    </div>
+    <button onclick="openWhatsNewModal()" class="text-[10px] font-mono bg-white/5 hover:bg-white/10 border border-white/10 px-2.5 py-1.5 rounded-lg text-slate-300 transition-colors">
+      What's New
+    </button>
   </header>
 
   <main class="w-full max-w-md my-auto z-20 space-y-4">
+    <!-- Form Selection -->
     <div id="selection-view" class="space-y-4 view-enter">
       <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
-        <h1 class="font-syne text-3xl font-extrabold tracking-tight leading-none mb-3 pb-1 pt-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 drop-shadow-sm">
+        <div class="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-bl from-white/10 via-zinc-400/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        <h1 class="font-syne text-3xl font-extrabold tracking-tight leading-none mb-3 pb-1 pt-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
           Final Average <br />Calculator
         </h1>
-        <p class="text-slate-300 text-xs leading-relaxed">Select your form level or create a custom setup to calculate your weighted final average.</p>
+        <p class="text-slate-400 text-xs leading-relaxed">Select your form level or create a custom setup to calculate your weighted final average.</p>
       </div>
       <div id="forms-grid" class="grid grid-cols-1 gap-3"></div>
     </div>
 
     <!-- Custom Builder View -->
     <div id="custom-builder-view" class="hidden space-y-4 view-enter">
-      <button onclick="showSelectionView()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-200 py-1 cursor-pointer hover:text-white transition-colors">
+      <button onclick="showSelectionView()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors py-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         <span>Back to selection</span>
       </button>
 
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden space-y-2">
         <h1 class="font-syne text-2xl font-extrabold leading-tight pt-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">Custom Setup</h1>
-        <p class="text-xs text-slate-300 leading-relaxed">Configure your subjects and credit hours below, or load a saved setup.</p>
+        <p class="text-xs text-slate-400 leading-relaxed">Configure your subjects and credit hours below, or load a saved setup.</p>
       </div>
 
+      <!-- Saved Setups Fancy Menu Bar -->
       <div class="glass-card rounded-2xl p-4 space-y-3 relative z-30">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-mono uppercase text-slate-300 font-bold tracking-wider">Saved Custom Setups</span>
-          <span id="saved-count" class="text-[10px] font-mono text-zinc-400">0 saved</span>
+          <span class="text-[10px] font-mono uppercase text-slate-400 font-bold tracking-wider">Saved Custom Setups</span>
+          <span id="saved-count" class="text-[10px] font-mono text-slate-500">0 saved</span>
         </div>
         <div class="grid grid-cols-12 gap-2 relative">
           <div class="col-span-6 relative">
-            <button onclick="toggleSetupDropdown()" id="setup-dropdown-btn" class="w-full bg-[#060609] border border-white/20 rounded-xl px-3 py-2.5 font-mono text-xs text-left text-slate-200 flex items-center justify-between cursor-pointer hover:border-white/40 transition-colors shadow-inner">
+            <button onclick="toggleSetupDropdown()" id="setup-dropdown-btn" class="w-full bg-[#0d0d14] border border-white/10 hover:border-white/20 rounded-xl px-3 py-2.5 font-mono text-xs text-left text-slate-300 flex items-center justify-between transition-all">
               <span id="setup-dropdown-label" class="truncate">Select setup...</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-zinc-300 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div id="setup-dropdown-menu" class="hidden absolute bottom-full left-0 right-0 mb-1.5 bg-[#0a0a0f] border border-white/25 rounded-xl shadow-2xl z-40 max-h-48 overflow-y-auto p-1 space-y-0.5"></div>
+            <div id="setup-dropdown-menu" class="hidden absolute bottom-full left-0 right-0 mb-1.5 bg-[#121218] border border-white/15 rounded-xl shadow-2xl z-40 max-h-48 overflow-y-auto p-1 space-y-0.5"></div>
           </div>
-          <button onclick="loadSelectedSetup()" class="col-span-3 py-2.5 rounded-xl bg-white/15 border border-white/25 text-xs font-mono text-white font-bold cursor-pointer hover:bg-white/25 transition-colors shadow-sm">Load</button>
-          <button onclick="deleteSelectedSetup()" class="col-span-3 py-2.5 rounded-xl bg-rose-500/15 border border-rose-500/35 text-xs font-mono text-rose-300 font-bold cursor-pointer hover:bg-rose-500/25 transition-colors shadow-sm">Delete</button>
+          <button onclick="loadSelectedSetup()" class="col-span-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-mono text-white font-bold transition-all shadow-md">Load</button>
+          <button onclick="deleteSelectedSetup()" class="col-span-3 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-xs font-mono text-rose-300 font-bold transition-all shadow-md">Delete</button>
         </div>
       </div>
 
       <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-4 relative z-10">
-        <div class="flex items-center justify-between border-b border-white/15 pb-2">
-          <span class="text-xs font-mono uppercase text-slate-300 font-bold tracking-wider">Subject Setup</span>
-          <button onclick="addCustomSubjectRow()" class="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-white bg-white/10 border border-white/25 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-white/20 transition-colors shadow-sm">
+        <div class="flex items-center justify-between border-b border-white/10 pb-2">
+          <span class="text-xs font-mono uppercase text-slate-400 font-bold tracking-wider">Subject Setup</span>
+          <button onclick="addCustomSubjectRow()" class="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-white bg-gradient-to-r from-zinc-700 to-zinc-900 hover:from-zinc-600 hover:to-zinc-800 border border-white/20 px-3 py-1.5 rounded-lg transition-all shadow-md">
             + Add Subject
           </button>
         </div>
+
         <div id="custom-subjects-inputs" class="space-y-3 max-h-[40vh] overflow-y-auto pr-1"></div>
-        <div class="pt-3 border-t border-white/15 space-y-2.5">
-          <button onclick="launchCustomCalculator()" class="btn-wave w-full py-3.5 rounded-xl text-xs font-mono font-extrabold flex items-center justify-center gap-2 cursor-pointer shadow-lg">
+
+        <div class="pt-3 border-t border-white/10 space-y-2.5">
+          <button onclick="launchCustomCalculator()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-white via-zinc-200 to-zinc-400 hover:from-zinc-100 hover:to-zinc-300 text-xs font-mono text-black font-extrabold transition-all shadow-xl flex items-center justify-center gap-2 border border-white/40">
             <span>Create</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m-7 7H3"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
-          <button onclick="openSaveModal()" class="w-full py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs font-mono text-slate-200 font-semibold cursor-pointer hover:bg-white/15 transition-colors shadow-sm">Save Current Setup</button>
+          <button onclick="openSaveModal()" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-300 transition-all font-semibold">Save Current Setup</button>
         </div>
       </div>
     </div>
 
     <!-- Track Selection -->
     <div id="tracks-view" class="hidden space-y-4 view-enter">
-      <button onclick="showSelectionView()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-200 py-1 cursor-pointer hover:text-white transition-colors">
+      <button onclick="showSelectionView()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors py-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         <span>Back to form selection</span>
       </button>
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
         <h1 id="tracks-view-title" class="font-syne text-2xl font-extrabold leading-tight pb-1 pt-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400"></h1>
-        <p class="text-xs text-slate-300 mt-1 leading-relaxed">Select your class to calculate your final weighted average.</p>
+        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Select your class to calculate your final weighted average.</p>
       </div>
       <div id="tracks-grid" class="grid grid-cols-1 gap-3"></div>
-      <p class="text-center text-[10px] font-mono text-zinc-400 pt-1">* more classes to come</p>
+      <p class="text-center text-[10px] font-mono text-slate-500 pt-1">* more classes to come</p>
     </div>
 
     <!-- Calculator View -->
     <div id="calculator-view" class="hidden space-y-4">
-      <button onclick="backFromCalculator()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-200 py-1 cursor-pointer hover:text-white transition-colors">
+      <button onclick="backFromCalculator()" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-slate-300 hover:text-white transition-colors py-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         <span id="back-button-text">Back to selection</span>
       </button>
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-start gap-3">
-          <div id="calc-accent-bar" class="w-2.5 h-10 rounded-full shrink-0 mt-0.5 shadow-sm"></div>
+          <div id="calc-accent-bar" class="w-2.5 h-10 rounded-full shrink-0 mt-0.5 shadow-lg"></div>
           <div>
             <h1 id="calc-title" class="font-syne text-2xl font-extrabold leading-tight pb-1 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400"></h1>
-            <p id="calc-desc" class="text-xs text-slate-300 mt-1 leading-relaxed">Enter each grade as a percentage from 0 to 100. Each grade is multiplied by its credit hours, then the total is divided by your total credits.</p>
+            <p id="calc-desc" class="text-xs text-slate-400 mt-1 leading-relaxed">Enter each grade as a percentage from 0 to 100. Each grade is multiplied by its credit hours, then the total is divided by your total credits.</p>
           </div>
         </div>
       </div>
-
-      <!-- Semester Mode Toggle Bar & Enable Semesters Button -->
-      <div class="glass-card rounded-2xl p-3 flex flex-col gap-2">
-        <div class="flex items-center justify-between gap-2">
-          <span class="text-xs font-mono uppercase text-zinc-300 font-bold pl-1">Semesters Mode:</span>
-          <button type="button" id="toggle-sem-mode-btn" onclick="toggleSemesterModeUI()" class="py-1.5 px-3 rounded-xl text-xs font-mono font-bold bg-white/10 border border-white/20 text-zinc-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm">Enable Semesters</button>
-        </div>
-        <div id="semester-buttons-wrapper" class="hidden grid grid-cols-3 gap-1.5 w-full pt-1">
-          <button type="button" id="sem-1-btn" onclick="setSemesterMode(1)" class="py-2 rounded-xl text-xs font-mono font-bold btn-wave cursor-pointer shadow-sm">Semester 1</button>
-          <button type="button" id="sem-2-btn" onclick="setSemesterMode(2)" class="py-2 rounded-xl text-xs font-mono font-bold text-zinc-400 hover:text-white bg-white/5 border border-white/15 transition-all cursor-pointer">Semester 2</button>
-          <button type="button" id="sem-comb-btn" onclick="setSemesterMode('combined')" class="py-2 rounded-xl text-xs font-mono font-bold text-zinc-400 hover:text-white bg-white/5 border border-white/15 transition-all cursor-pointer">Final</button>
-        </div>
-      </div>
-
       <div class="glass-card rounded-2xl p-4 sm:p-5 space-y-5">
         <div class="flex items-center justify-between pb-1">
-          <span class="text-[10px] font-mono uppercase text-slate-300 font-bold tracking-wider" id="semester-heading-label">Subject Grade Entry</span>
-          <button onclick="autofillGrades()" title="Autofill Sample Grades" class="w-8 h-8 rounded-lg bg-white/10 border border-white/25 text-white flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors shadow-sm">
+          <span class="text-[10px] font-mono uppercase text-slate-400 font-bold tracking-wider">Subject Grade Entry</span>
+          <button onclick="autofillGrades()" title="Autofill Sample Grades" class="w-8 h-8 rounded-lg bg-gradient-to-tr from-zinc-800 to-zinc-700 hover:from-zinc-700 hover:to-zinc-600 border border-white/20 text-white flex items-center justify-center transition-all active:scale-95 shadow-md">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-zinc-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </button>
         </div>
 
-        <div id="grades-table-header" class="grid grid-cols-12 text-[10px] font-mono tracking-wider text-slate-300 uppercase pb-2 border-b border-white/15 font-bold items-center">
+        <div class="grid grid-cols-12 text-[10px] font-mono tracking-wider text-slate-400 uppercase pb-2 border-b border-white/10 font-bold items-center">
           <span class="col-span-5 sm:col-span-6">Subject</span>
           <span class="col-span-2 text-center">Hrs</span>
           <span class="col-span-3 text-right">Grade</span>
           <span class="col-span-2 text-right">Points</span>
         </div>
         <div id="subjects-container" class="space-y-6"></div>
-        <div class="pt-4 border-t border-white/15 space-y-4">
+        <div class="pt-4 border-t border-white/10 space-y-4">
           <div class="grid grid-cols-2 gap-3 text-xs font-mono">
-            <div class="bg-white/[0.05] border border-white/12 rounded-xl p-3 shadow-inner">
-              <span class="text-zinc-300 text-[10px] block uppercase pb-0.5">Entered Credits</span>
+            <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
+              <span class="text-slate-400 text-[10px] block uppercase pb-0.5">Entered Credits</span>
               <span id="stat-credits" class="text-base font-bold text-white font-syne">0 / 30</span>
             </div>
-            <div class="bg-white/[0.05] border border-white/12 rounded-xl p-3 shadow-inner">
-              <span class="text-zinc-300 text-[10px] block uppercase pb-0.5">Total Points</span>
+            <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
+              <span class="text-slate-400 text-[10px] block uppercase pb-0.5">Total Points</span>
               <span id="stat-points" class="text-base font-bold text-white font-syne">0.00</span>
             </div>
           </div>
-          <div id="average-box" class="bg-white/[0.05] border border-white/15 rounded-xl p-4 space-y-3 shadow-inner">
+          <div id="average-box" class="bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] border border-white/10 rounded-xl p-4 space-y-3 transition-all duration-500">
             <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="font-syne text-sm font-extrabold text-white tracking-wide pb-0.5" id="final-average-title">Final Average</span>
+              <span class="font-syne text-sm font-extrabold text-white tracking-wide pb-0.5">Final Average</span>
               <div class="flex items-center gap-2">
-                <span id="honor-roll-star" class="hidden text-amber-300 text-lg drop-shadow">⭐</span>
+                <span id="honor-roll-star" class="hidden text-amber-300 text-lg animate-bounce">⭐</span>
                 <span id="final-average-badge" class="font-mono text-xl font-extrabold text-white">0.00%</span>
               </div>
             </div>
-            <div class="pt-1 text-[11px] text-slate-200 border-t border-white/10">
-              <span id="status-message" class="text-zinc-300 block mt-1">Enter grade percentages from 0 to 100 to view average.</span>
+            <div class="pt-1 text-[11px] text-slate-300 border-t border-white/5">
+              <span id="status-message" class="text-slate-400 block mt-1">Enter grade percentages from 0 to 100 to view average.</span>
             </div>
-            <p class="text-[9px] text-zinc-400 italic">* Official school averages depend on departmental policy.</p>
+            <p class="text-[9px] text-slate-500 italic">* Official school averages depend on departmental policy.</p>
           </div>
-          <button id="analytics-btn" onclick="openStatsModal()" disabled class="w-full py-3 rounded-xl bg-white/[0.04] border border-white/15 text-xs font-mono text-zinc-400 font-bold flex items-center justify-center gap-2 cursor-not-allowed">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-zinc-500" id="analytics-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <button id="analytics-btn" onclick="openStatsModal()" disabled class="w-full py-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs font-mono text-slate-500 transition-all font-bold flex items-center justify-center gap-2 cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" id="analytics-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             <span id="analytics-btn-text">Enter All Grades to View Analytics</span>
           </button>
-          <button onclick="clearGrades()" class="w-full py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs font-mono text-slate-200 font-semibold cursor-pointer hover:bg-white/15 transition-colors shadow-sm">Clear grades</button>
+          <button onclick="clearGrades()" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-300 transition-all font-semibold">Clear all grades</button>
         </div>
       </div>
     </div>
   </main>
 
   <!-- Custom Save Setup Modal -->
-  <div id="save-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/95">
-    <div class="glass-card w-full max-w-sm rounded-2xl p-5 space-y-4 animate-modal border border-white/30 relative shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/15 pb-3">
+  <div id="save-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="glass-card w-full max-w-sm rounded-2xl p-5 space-y-4 animate-modal border border-white/20 relative shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <h3 class="font-syne text-base font-extrabold text-white">Save Custom Setup</h3>
-        <button onclick="closeSaveModal()" class="text-slate-300 p-1 rounded-lg cursor-pointer hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        <button onclick="closeSaveModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
       </div>
       <div class="space-y-2">
-        <label class="text-[10px] font-mono uppercase text-slate-300 font-bold tracking-wider block">Setup Name</label>
-        <input type="text" id="save-setup-input-name" placeholder="e.g. Semester 1" class="input-field w-full rounded-xl px-3 py-2.5 font-mono text-xs text-white"/>
+        <label class="text-[10px] font-mono uppercase text-slate-400 font-bold tracking-wider block">Setup Name</label>
+        <input type="text" id="save-setup-input-name" placeholder="e.g. Semester 1" class="w-full bg-[#0d0d14] border border-white/15 focus:border-white/40 focus:outline-none rounded-xl px-3 py-2.5 font-mono text-xs text-white"/>
       </div>
       <div class="flex gap-2 pt-2">
-        <button onclick="closeSaveModal()" class="w-1/2 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs font-mono text-slate-200 font-bold cursor-pointer hover:bg-white/15 transition-colors shadow-sm">Cancel</button>
-        <button onclick="confirmSaveSetup()" class="w-1/2 py-2.5 rounded-xl bg-white text-black text-xs font-mono font-extrabold cursor-pointer shadow-md">Save</button>
+        <button onclick="closeSaveModal()" class="w-1/2 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-300 font-bold transition-all">Cancel</button>
+        <button onclick="confirmSaveSetup()" class="w-1/2 py-2.5 rounded-xl bg-white text-black text-xs font-mono font-extrabold hover:bg-zinc-200 transition-all shadow-lg">Save</button>
       </div>
     </div>
   </div>
 
   <!-- Statistics Modal -->
-  <div id="stats-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/95">
-    <div class="glass-card w-full max-w-md rounded-2xl p-5 space-y-4 animate-modal border border-white/30 relative max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-white/15 pb-3 sticky top-0 bg-[#060609] z-10 pt-1 shadow-sm">
+  <div id="stats-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="glass-card w-full max-w-md rounded-2xl p-5 space-y-4 animate-modal border border-white/20 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3 sticky top-0 bg-[#0d0d14]/95 backdrop-blur-md z-10 pt-1">
         <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full bg-white shadow-sm"></div>
-          <h3 id="stats-modal-title" class="font-syne text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 pb-0.5">Comprehensive Grade Analytics</h3>
+          <div class="w-2 h-2 rounded-full animate-pulse bg-white"></div>
+          <h3 class="font-syne text-base font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 pb-0.5">Comprehensive Grade Analytics</h3>
         </div>
-        <button onclick="closeStatsModal()" class="text-slate-300 p-1 rounded-lg cursor-pointer hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        <button onclick="closeStatsModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
       </div>
       <div id="stats-modal-body" class="space-y-3"></div>
-      <button onclick="closeStatsModal()" class="w-full py-3 rounded-xl bg-white/15 border border-white/25 text-xs font-mono text-white font-bold mt-2 cursor-pointer hover:bg-white/25 transition-colors shadow-md">Close Analytics</button>
+      <button onclick="closeStatsModal()" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-mono text-white font-bold mt-2 shadow-lg">Close Analytics</button>
     </div>
   </div>
 
-  <!-- Personal Profile Modal (Separate) -->
-  <div id="personal-profile-modal" class="fixed inset-0 bg-black/98 z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-sm rounded-3xl p-6 space-y-4 animate-modal border border-white/30 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/15 pb-3">
-        <h3 class="font-syne text-lg font-extrabold text-white">My Profile</h3>
-        <button onclick="closePersonalProfileModal()" class="w-7 h-7 rounded-full bg-white/10 border border-white/25 text-zinc-200 flex items-center justify-center text-xs cursor-pointer hover:bg-white/20 transition-colors shadow-sm">✕</button>
-      </div>
-      <div class="space-y-3 font-mono text-xs">
-        <div class="p-3.5 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner">
-          <div class="text-[10px] text-zinc-400 uppercase">Username</div>
-          <div id="profile-modal-uname" class="text-sm font-bold text-white truncate">—</div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner">
-          <div class="text-[10px] text-zinc-400 uppercase">Password</div>
-          <div id="profile-modal-upass" class="text-sm font-bold text-white font-mono truncate">—</div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner">
-          <div class="text-[10px] text-zinc-400 uppercase">Class Level</div>
-          <div id="profile-modal-uclass" class="text-sm font-bold text-white truncate">—</div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner">
-          <div class="text-[10px] text-zinc-400 uppercase">Registration Timestamp</div>
-          <div id="profile-modal-timestamp" class="text-xs text-zinc-200 truncate">—</div>
-        </div>
-      </div>
-      <button onclick="closePersonalProfileModal()" class="w-full py-2.5 rounded-xl bg-white/15 text-white font-bold text-xs cursor-pointer border border-white/25 hover:bg-white/25 transition-colors shadow-sm">Close</button>
-    </div>
-  </div>
-
-  <!-- Registered Profiles Directory Modal -->
-  <div id="modal" class="fixed inset-0 bg-black/98 z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-card w-full max-w-md rounded-3xl p-6 space-y-4 animate-modal max-h-[85vh] flex flex-col border border-white/30 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/15 pb-3">
-        <h3 id="modal-title" class="font-syne text-lg font-extrabold text-white">Registered Profiles Directory</h3>
-        <button onclick="closeModal()" class="w-7 h-7 rounded-full bg-white/10 border border-white/25 text-zinc-200 flex items-center justify-center text-xs cursor-pointer hover:bg-white/20 transition-colors shadow-sm">✕</button>
-      </div>
-      <div id="directory-analytics-summary" class="grid grid-cols-3 gap-2 py-1"></div>
-      <div id="accounts-list" class="overflow-y-auto space-y-2 flex-1 font-mono text-xs"><div class="text-center py-6 text-zinc-400">Loading profiles...</div></div>
-    </div>
-  </div>
-
-  <footer class="w-full max-w-md flex flex-row items-center justify-between text-[10px] text-zinc-400 z-20 pt-4 border-t border-white/10 mt-6 shrink-0">
-    <span>Independence High School</span><span class="font-mono">IHS CALCULATOR</span>
+  <footer class="w-full max-w-md flex flex-row items-center justify-between text-[10px] text-slate-600 z-20 pt-4 border-t border-white/[0.05] mt-6 shrink-0">
+    <span>Independence High School</span><span class="font-mono">IHS CALCULATOR V11.0</span>
   </footer>
 
   <script>
-    const F_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSffEzoDDbYyE95KYNlcLtDjj6DNu-zKBZI7rxgxhe8Ju-bOuw/formResponse';
-    const C_URL = 'https://docs.google.com/spreadsheets/d/1PE-U2SUqFNa5yYWyRPzl2dl0uOG6MQy2OSPF8wVBUpc/gviz/tq?tqx=out:csv&sheet=Form%20Responses%201';
-    const ENT = { u: 'entry.1469237373', p: 'entry.383641962', c: 'entry.1943973410' };
-    const CLS_MAP = {
-      "1st": ["1 Empathy", "1 Courage", "1 Excellence", "1 Respect", "1 Justice", "1 Honesty", "1 Responsibility", "1 Patriotism"],
-      "2nd": ["2 Empathy", "2 Courage", "2 Excellence", "2 Respect", "2 Justice", "2 Honesty", "2 Responsibility", "2 Patriotism"],
-      "3rd": ["3 Arts", "3 I.C.T.", "3 Business 1", "3 Business 2", "3 Tourism 1", "3 Tourism 2", "3 Industrial", "3 General", "3 Science"],
-      "4th": ["4 Arts", "4 I.C.T.", "4 Business 1", "4 Business 2", "4 Tourism 1", "4 Tourism 2", "4 Industrial", "4 General", "4 Science"]
-    };
-
-    let cachedRows = [], debounceTimer = null, authMode = 'signup';
-    let currentSemester = 1; // 1, 2, or 'combined'
-    let semesterGrades = { 1: {}, 2: {} };
-    let activeCredentials = { user: '', pass: '', timestamp: '' };
-
-    function showCustomAlert(title, message) {
-      document.getElementById('custom-alert-title').textContent = title;
-      document.getElementById('custom-alert-msg').textContent = message;
-      document.getElementById('custom-alert-modal').classList.remove('hidden');
-      document.body.classList.add('modal-open');
-    }
-    const closeCustomAlert = () => {
-      document.getElementById('custom-alert-modal').classList.add('hidden');
-      document.body.classList.remove('modal-open');
-    };
-
-    const preventSpaces = el => el.value = el.value.replace(/\s+/g, '');
-    const debounceCalculate = () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        if (currentSemester !== 'combined') {
-          saveCurrentSemesterInputs();
-        }
-        calculateCustomAverage();
-      }, 50);
-    };
-
-    window.onload = () => {
-      const p = document.getElementById('particles');
-      for(let i=0; i<4; i++) p.innerHTML += `<div class="particle" style="width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;left:${Math.random()*100}%;animation:rise ${Math.random()*8+6}s linear infinite;animation-delay:${Math.random()*5}s"></div>`;
-      if (localStorage.getItem('i_n') && localStorage.getItem('i_c')) {
-        document.getElementById('auth-overlay').classList.add('hidden');
-        activeCredentials.user = localStorage.getItem('i_n');
-        activeCredentials.pass = localStorage.getItem('i_p') || "••••••••";
-        activeCredentials.timestamp = localStorage.getItem('i_ts') || new Date().toLocaleString();
-      } else {
-        document.getElementById('auth-overlay').classList.remove('hidden');
-        document.body.classList.add('modal-open');
-      }
-      renderFormSelectionGrid();
-      fetchLiveProfileCount();
-    };
-
-    async function fetchLiveProfileCount(inc = 0) {
-      try {
-        const text = await (await fetch(C_URL + '&_=' + new Date().getTime())).text();
-        const rows = text.split('\n');
-        let count = 0;
-        for(let i=1; i<rows.length; i++) {
-          const r = rows[i].split(',');
-          if(r.length >= 3 && r[1]?.replace(/['"]+/g,'').trim() && r[1] !== 'Username') count++;
-        }
-        document.getElementById('live-profile-count').textContent = count + inc;
-      } catch(e) { document.getElementById('live-profile-count').textContent = "Active"; }
+    function closeWhatsNewModal() {
+      document.getElementById('whats-new-modal').classList.add('hidden');
     }
 
-    function switchAuthMode(mode) {
-      authMode = mode;
-      document.getElementById('tab-signup-mode').className = `py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${mode==='signup'?'btn-wave shadow-md':'text-zinc-400 hover:text-white'}`;
-      document.getElementById('tab-login-mode').className = `py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${mode==='login'?'btn-wave shadow-md':'text-zinc-400 hover:text-white'}`;
-      document.getElementById('auth-title').textContent = mode === 'signup' ? "Create Profile" : "Welcome Back";
-      document.getElementById('auth-subtitle').textContent = mode === 'signup' ? "Set up your username, password, and select your class." : "Log in with your existing username and password.";
-      document.getElementById('auth-submit-btn').textContent = mode === 'signup' ? "Register Profile" : "Log In";
-      document.getElementById('signup-fields').classList.toggle('hidden', mode === 'login');
+    function openWhatsNewModal() {
+      document.getElementById('whats-new-modal').classList.remove('hidden');
     }
-
-    function setForm(lvl) {
-      Array.from(document.getElementById('tabs').children).forEach(b => b.classList.toggle('active', b.textContent.includes(lvl)));
-      document.getElementById('uclass').innerHTML = '<option value="">Select Class...</option>' + CLS_MAP[lvl].map(x => `<option value="${x}">${x}</option>`).join('');
-      document.getElementById('class-box').classList.remove('hidden');
-    }
-
-    const togglePassVisibility = () => { const i = document.getElementById('upass'); i.type = i.type === 'password' ? 'text' : 'password'; };
-
-    async function handleAuthAction() {
-      const n = document.getElementById('uname').value.trim(), p = document.getElementById('upass').value.trim(), c = document.getElementById('uclass').value;
-      if(n.length < 2 || /\s/.test(n)) { showCustomAlert("Validation Error", "Please enter a valid username without spaces."); return; }
-      if(p.length < 2 || /\s/.test(p)) { showCustomAlert("Validation Error", "Please enter a valid password without spaces."); return; }
-      const nowReadable = new Date().toLocaleString();
-      if(n.toLowerCase() === 'christianmai') {
-        if(p === '8989') { saveAndStart(n, p, 'Admin / Full Access', nowReadable); return; }
-        showCustomAlert("Authentication Failed", "Incorrect password for christianmai.");
-        return;
-      }
-      try {
-        const text = await (await fetch(C_URL)).text();
-        const rows = text.split('\n');
-        let exists = false, matchedTimestamp = nowReadable;
-        for(let i=1; i<rows.length; i++) {
-          const r = rows[i].split(',');
-          if(r.length >= 4) {
-            const rowUser = r[1]?.replace(/['"]+/g,'').trim();
-            const rowPass = r[3]?.replace(/['"]+/g,'').trim();
-            const rowClass = r[2]?.replace(/['"]+/g,'').trim();
-            const rowTime = r[0]?.replace(/['"]+/g,'').trim();
-            if(rowUser && rowUser.toLowerCase() === n.toLowerCase()) {
-              exists = true;
-              if(rowTime) matchedTimestamp = rowTime;
-              if (authMode === 'login') {
-                if(rowPass === p) { saveAndStart(n, p, rowClass, matchedTimestamp); return; }
-                showCustomAlert("Authentication Failed", "Incorrect password.");
-                return;
-              }
-            }
-          }
-        }
-        if (authMode === 'signup') {
-          if (exists) { showCustomAlert("Registration Notice", "This username is already taken! Please choose another or log in."); return; }
-          if(!c) { showCustomAlert("Form Selection Required", "Select your Form Level and Class."); return; }
-          const d = new FormData();
-          d.append(ENT.u, n); d.append(ENT.p, p); d.append(ENT.c, c);
-          fetch(F_URL, { method: 'POST', mode: 'no-cors', body: d });
-          const cur = parseInt(document.getElementById('live-profile-count').textContent);
-          if(!isNaN(cur)) document.getElementById('live-profile-count').textContent = cur + 1;
-          saveAndStart(n, p, c, nowReadable);
-        } else if (!exists) { showCustomAlert("Account Not Found", "Account not found. Please sign up first."); }
-      } catch(e) { showCustomAlert("Connection Error", "Network error communicating with database. Please try again."); }
-    }
-
-    function saveAndStart(n, p, c, ts) {
-      localStorage.setItem('i_n', n);
-      localStorage.setItem('i_p', p);
-      localStorage.setItem('i_c', c);
-      localStorage.setItem('i_ts', ts);
-      activeCredentials.user = n;
-      activeCredentials.pass = p;
-      activeCredentials.timestamp = ts;
-      document.getElementById('auth-overlay').classList.add('hidden');
-      document.body.classList.remove('modal-open');
-    }
-
-    function openPersonalProfileModal() {
-      document.getElementById('profile-modal-uname').textContent = localStorage.getItem('i_n') || "Guest";
-      document.getElementById('profile-modal-upass').textContent = localStorage.getItem('i_p') || "••••••••";
-      document.getElementById('profile-modal-uclass').textContent = localStorage.getItem('i_c') || "Not Assigned";
-      document.getElementById('profile-modal-timestamp').textContent = localStorage.getItem('i_ts') || new Date().toLocaleString();
-      document.getElementById('personal-profile-modal').classList.remove('hidden');
-      document.body.classList.add('modal-open');
-    }
-    const closePersonalProfileModal = () => {
-      document.getElementById('personal-profile-modal').classList.add('hidden');
-      document.body.classList.remove('modal-open');
-    };
-
-    async function loadModal(show) {
-      document.getElementById('modal').classList.toggle('hidden', !show);
-      document.body.classList.toggle('modal-open', show);
-      if(!show) return;
-      const l = document.getElementById('accounts-list'), summaryBox = document.getElementById('directory-analytics-summary');
-      l.innerHTML = '<div class="text-center py-6 text-zinc-400">Loading profiles...</div>';
-      summaryBox.innerHTML = '';
-      try {
-        const text = await (await fetch(C_URL + '&_=' + new Date().getTime())).text();
-        cachedRows = text.split('\n');
-        let html = '', totalActive = 0, formCounts = { "1st": 0, "2nd": 0, "3rd": 0, "4th": 0 };
-        const currentUserName = (localStorage.getItem('i_n') || "").toLowerCase();
-        const isAdmin = currentUserName === 'christianmai';
-        cachedRows.slice(1).forEach((r, idx) => {
-          const d = r.split(',');
-          if(d.length >= 3 && d[1]?.replace(/['"]+/g,'').trim() && d[1] !== 'Username') {
-            const user = d[1].replace(/['"]+/g,'').trim(), cls = d[2].replace(/['"]+/g,'').trim();
-            totalActive++;
-            if (cls.startsWith('1')) formCounts["1st"]++; else if (cls.startsWith('2')) formCounts["2nd"]++; else if (cls.startsWith('3')) formCounts["3rd"]++; else if (cls.startsWith('4')) formCounts["4th"]++;
-            html += isAdmin ? 
-              `<div onclick="inspectProfile(${idx + 1})" class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors shadow-inner"><div><div class="font-bold text-white">${user}</div><div class="text-[10px] text-zinc-300">${cls}</div></div><span class="text-[9px] px-2 py-0.5 rounded bg-white/15 text-white border border-white/30">Inspect ➔</span></div>` :
-              `<div class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 flex justify-between items-center shadow-inner"><div><div class="font-bold text-white">${user}</div><div class="text-[10px] text-zinc-300">${cls}</div></div><span class="text-[9px] px-2 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/15">Member</span></div>`;
-          }
-        });
-        summaryBox.innerHTML = `
-          <div class="bg-white/[0.05] border border-white/15 rounded-xl p-2.5 text-center shadow-inner"><span class="text-[9px] font-mono text-zinc-300 uppercase block pb-0.5">Total Registered</span><span class="font-syne text-sm font-extrabold text-white">${totalActive}</span></div>
-          <div class="bg-white/[0.05] border border-white/15 rounded-xl p-2.5 text-center shadow-inner"><span class="text-[9px] font-mono text-zinc-300 uppercase block pb-0.5">1st & 2nd Forms</span><span class="font-syne text-sm font-extrabold text-emerald-400">${formCounts["1st"] + formCounts["2nd"]}</span></div>
-          <div class="bg-white/[0.05] border border-white/15 rounded-xl p-2.5 text-center shadow-inner"><span class="text-[9px] font-mono text-zinc-300 uppercase block pb-0.5">3rd & 4th Forms</span><span class="font-syne text-sm font-extrabold text-blue-400">${formCounts["3rd"] + formCounts["4th"]}</span></div>`;
-        l.innerHTML = html || '<div class="text-center py-6 text-zinc-400">No profiles found.</div>';
-      } catch(e) { l.innerHTML = '<div class="text-center py-6 text-zinc-400">Failed to load profiles.</div>'; }
-    }
-
-    function inspectProfile(idx) {
-      if ((localStorage.getItem('i_n') || "").toLowerCase() !== 'christianmai') { showCustomAlert("Access Denied", "Administrator access required."); return; }
-      const r = cachedRows[idx]?.split(',');
-      if(!r) return;
-      document.getElementById('modal-title').textContent = `Profile: ${r[1]?.replace(/['"]+/g,'').trim()}`;
-      document.getElementById('directory-analytics-summary').innerHTML = '';
-      document.getElementById('accounts-list').innerHTML = `
-        <div class="space-y-3">
-          <div class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner"><div class="text-[10px] text-zinc-400 uppercase">Username</div><div class="text-sm font-bold text-white">${r[1]?.replace(/['"]+/g,'').trim()}</div></div>
-          <div class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner"><div class="text-[10px] text-zinc-400 uppercase">Password</div><div class="text-sm font-bold text-white font-mono">${r[3]?.replace(/['"]+/g,'').trim() || 'N/A'}</div></div>
-          <div class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner"><div class="text-[10px] text-zinc-400 uppercase">Class</div><div class="text-sm font-bold text-white">${r[2]?.replace(/['"]+/g,'').trim()}</div></div>
-          <div class="p-3 rounded-xl bg-[#0a0a0f] border border-white/15 space-y-1 shadow-inner"><div class="text-[10px] text-zinc-400 uppercase">Registration Timestamp</div><div class="text-xs text-zinc-200">${r[0]?.replace(/['"]+/g,'').trim()}</div></div>
-          <button onclick="loadModal(true)" class="w-full py-2.5 rounded-xl bg-white/10 text-white font-bold text-xs cursor-pointer border border-white/20 hover:bg-white/20 transition-colors shadow-sm">← Back to Profiles</button>
-        </div>`;
-    }
-
-    const closeModal = () => { document.getElementById('modal').classList.add('hidden'); document.body.classList.remove('modal-open'); };
-    const logout = () => { localStorage.clear(); location.reload(); };
 
     const GEN_CATS = [
-      { name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Mathematics" }, { id: "english", name: "English" }] },
+      { name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Math" }, { id: "english", name: "English" }] },
       { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "science", name: "Science" }, { id: "belizean", name: "Belizean Studies" }] },
-      { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "religion", name: "Religion" }, { id: "spanish", name: "Spanish" }, { id: "agri", name: "Agriculture" }, { id: "pe", name: "P.E." }, { id: "literature", name: "Literature" }, { id: "lsk", name: "LifeSkills" }, { id: "cart", name: "C.Arts" }] },
+      { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "religion", name: "Religion" }, { id: "spanish", name: "Spanish" }, { id: "agri", name: "Agriculture" }, { id: "pe", name: "PE" }, { id: "lit", name: "Literature" }, { id: "lsk", name: "LSK" }, { id: "cart", name: "C.Arts" }] },
       { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "keyboarding", name: "Keyboarding" }] },
       { name: "Club", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "club", name: "Club" }] }
     ];
 
     const TRACKS = {
-      arts: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "history", name: "History" }, { id: "english", name: "English" }, { id: "math", name: "Mathematics" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "literature", name: "Literature" }, { id: "hsb", name: "H.S.B." }, { id: "it", name: "I.T." }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }, { id: "pe", name: "P.E." }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lsk", name: "LifeSkills" }] }],
-      ict: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "programming", name: "Programming" }, { id: "mic", name: "M.I.C." }, { id: "english", name: "English" }, { id: "math", name: "Mathematics" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "physics", name: "Physics" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "networking", name: "Networking" }, { id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LifeSkills" }, { id: "pe", name: "P.E." }] }],
-      science: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "chemistry", name: "Chemistry" }, { id: "english", name: "English" }, { id: "math", name: "Mathematics" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "it", name: "I.T." }, { id: "biology", name: "Biology" }, { id: "physics", name: "Physics" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LifeSkills" }, { id: "pe", name: "P.E." }] }],
-      business: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "poa", name: "P.O.A." }, { id: "english", name: "English" }, { id: "math", name: "Mathematics" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "hsb", name: "H.S.B." }, { id: "pob", name: "P.O.B." }, { id: "it", name: "I.T." }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LifeSkills" }, { id: "pe", name: "P.E." }] }],
-      tourism: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "fph", name: "F.P.H." }, { id: "english", name: "English" }, { id: "math", name: "Mathematics" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "rst", name: "R.S.T." }, { id: "hsb", name: "H.S.B." }, { id: "it", name: "I.T." }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LifeSkills" }, { id: "pe", name: "P.E." }] }],
-      industrial: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Mathematics" }, { id: "english", name: "English" }, { id: "electrical", name: "Electrical" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "td", name: "T.D." }, { id: "building", name: "Building" }, { id: "it", name: "I.T." }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lit", name: "Literature" }, { id: "pe", name: "P.E." }, { id: "lsk", name: "LifeSkills" }] }],
-      general: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Mathematics" }, { id: "english", name: "English" }, { id: "agric", name: "Agriculture" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "hsb", name: "H.S.B." }, { id: "pob", name: "P.O.B." }, { id: "it", name: "I.T." }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "ent", name: "Entrepreneurship" }, { id: "bze", name: "Belizean Studies" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lit", name: "Literature" }, { id: "pe", name: "P.E." }, { id: "lsk", name: "LifeSkills" }] }]
+      arts: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "history", name: "History" }, { id: "english", name: "English" }, { id: "math", name: "Math" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "literature", name: "Literature" }, { id: "hsb", name: "HSB" }, { id: "it", name: "I.T" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }, { id: "pe", name: "PE" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lsk", name: "LSK" }] }],
+      ict: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "programming", name: "Programming" }, { id: "mic", name: "MIC" }, { id: "english", name: "English" }, { id: "math", name: "Math" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "physics", name: "Physics" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "networking", name: "Networking" }, { id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LSK" }, { id: "pe", name: "PE" }] }],
+      science: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "chemistry", name: "Chemistry" }, { id: "english", name: "English" }, { id: "math", name: "Math" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "it", name: "I.T" }, { id: "biology", name: "Biology" }, { id: "physics", name: "Physics" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LSK" }, { id: "pe", name: "PE" }] }],
+      business: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "poa", name: "POA" }, { id: "english", name: "English" }, { id: "math", name: "Math" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "hsb", name: "HSB" }, { id: "pob", name: "POB" }, { id: "it", name: "I.T" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LSK" }, { id: "pe", name: "PE" }] }],
+      tourism: [{ name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "fph", name: "FPH" }, { id: "english", name: "English" }, { id: "math", name: "Math" }] }, { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "rst", name: "RST" }, { id: "hsb", name: "HSB" }, { id: "it", name: "I.T" }] }, { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] }, { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "literature", name: "Literature" }, { id: "lsk", name: "LSK" }, { id: "pe", name: "PE" }] }],
+      industrial: [
+        { name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Mathematics" }, { id: "english", name: "English" }, { id: "electrical", name: "Electrical" }] },
+        { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "td", name: "TD" }, { id: "building", name: "Building" }, { id: "it", name: "I.T." }] },
+        { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "belizean_studies", name: "Belizean Studies" }, { id: "entrepreneurship", name: "Entrepreneurship" }] },
+        { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lit", name: "Lit" }, { id: "pe", name: "P.E." }, { id: "lsk", name: "LSK" }] }
+      ],
+      general: [
+        { name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Math" }, { id: "english", name: "English" }, { id: "agric", name: "Agriculture" }] },
+        { name: "Sub-majors", hoursLabel: "3 credit hours each", hours: 3, subjects: [{ id: "hsb", name: "Hsb" }, { id: "pob", name: "POB" }, { id: "it", name: "IT" }] },
+        { name: "Regulars", hoursLabel: "2 credit hours each", hours: 2, subjects: [{ id: "spanish", name: "Spanish" }, { id: "ent", name: "Ent" }, { id: "bze", name: "Bze" }] },
+        { name: "Singles", hoursLabel: "1 credit hour each", hours: 1, subjects: [{ id: "lit", name: "Lit" }, { id: "pe", name: "P.E." }, { id: "lsk", name: "LSK" }] }
+      ]
     };
 
     const TRK_LIST = [
@@ -629,54 +342,130 @@
       { id: "arts", name: "Arts", subjectsCount: 11, creditHours: 30 },
       { id: "business", name: "Business", subjectsCount: 12, creditHours: 30 },
       { id: "tourism", name: "Tourism", subjectsCount: 12, creditHours: 30 },
-      { id: "industrial", name: "Industrial", subjectsCount: 12, creditHours: 30 },
-      { id: "general", name: "General", subjectsCount: 12, creditHours: 30 }
+      { id: "industrial", name: "Industrial", subjectsCount: 12, creditHours: 30, isNew: true },
+      { id: "general", name: "General", subjectsCount: 12, creditHours: 30, isNew: true }
     ];
 
     const FORMS = {
-      "first-form": { name: "First Form", number: "01", sub: "General Curriculum (30 Credits)", direct: true, bar: "bg-emerald-400", hover: "group-hover:text-emerald-300", border: "focus:border-emerald-400" },
-      "second-form": { name: "Second Form", number: "02", sub: "General Curriculum (30 Credits)", direct: true, bar: "bg-amber-400", hover: "group-hover:text-amber-300", border: "focus:border-amber-400" },
-      "third-form": { name: "Third Form", number: "03", sub: "Major Tracks Configuration", direct: false, bar: "bg-blue-400", hover: "group-hover:text-blue-300", border: "focus:border-blue-400", tracks: TRK_LIST },
-      "fourth-form": { name: "Fourth Form", number: "04", sub: "Major Tracks Configuration", direct: false, bar: "bg-rose-500", hover: "group-hover:text-rose-300", border: "focus:border-rose-500", tracks: TRK_LIST }
+      "first-form": { name: "First Form", number: "01", sub: "General Curriculum (30 Credits)", direct: true, accent: "text-emerald-400", bar: "bg-emerald-400", hover: "group-hover:text-emerald-300 group-hover:bg-emerald-500/20", border: "focus:border-emerald-400" },
+      "second-form": { name: "Second Form", number: "02", sub: "General Curriculum (30 Credits)", direct: true, accent: "text-amber-400", bar: "bg-amber-400", hover: "group-hover:text-amber-300 group-hover:bg-amber-500/20", border: "focus:border-amber-400" },
+      "third-form": { name: "Third Form", number: "03", sub: "Major Tracks Configuration", direct: false, accent: "text-blue-400", bar: "bg-blue-400", hover: "group-hover:text-blue-300 group-hover:bg-blue-500/20", border: "focus:border-blue-400", tracks: TRK_LIST },
+      "fourth-form": { name: "Fourth Form", number: "04", sub: "Major Tracks Configuration", direct: false, accent: "text-rose-400", bar: "bg-rose-500", hover: "group-hover:text-rose-300 group-hover:bg-rose-500/20", border: "focus:border-rose-500", tracks: TRK_LIST }
     };
 
-    let activeFormKey = null, selectedSavedSetupName = "";
-    let customSubjectsList = [{ name: "Mathematics", credits: 4 }, { name: "English", credits: 4 }, { name: "Spanish", credits: 2 }, { name: "Belizean Studies", credits: 2 }, { name: "I.T.", credits: 3 }, { name: "Literature", credits: 2 }, { name: "LifeSkills", credits: 1 }, { name: "P.E.", credits: 1 }];
+    let activeFormKey = null;
+    let selectedSavedSetupName = "";
+    let customSubjectsList = [
+      { name: "Mathematics", credits: 4 },
+      { name: "English Language", credits: 4 },
+      { name: "General Science", credits: 3 },
+      { name: "Social Studies", credits: 3 },
+      { name: "Spanish", credits: 2 }
+    ];
+
     let savedCustomSetups = JSON.parse(localStorage.getItem('ihs_saved_setups') || '{}');
 
     function renderFormSelectionGrid() {
       const container = document.getElementById('forms-grid');
-      container.innerHTML = Object.keys(FORMS).map(key => {
+      container.innerHTML = '';
+      
+      Object.keys(FORMS).forEach(key => {
         const item = FORMS[key];
-        return `<button class="btn-static-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden" onclick="selectForm('${key}')">
-          <div class="space-y-0.5 z-10"><span class="text-[10px] font-mono font-semibold text-zinc-300 uppercase block">Form ${item.number}</span><h2 class="font-syne text-xl font-bold text-white ${item.hover} pb-0.5">${item.name}</h2><p class="text-[11px] text-zinc-300">${item.sub}</p></div>
-          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 ml-3 z-10 border border-white/20 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m-7 7H3"/></svg></div>
-        </button>`;
-      }).join('') + `
-        <button class="btn-static-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden" onclick="openCustomBuilder()">
-          <div class="space-y-0.5 z-10"><h2 class="font-syne text-xl font-bold text-white pb-0.5">Custom Setup</h2><p class="text-[11px] text-zinc-300">Build and save your own layout</p></div>
-          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 ml-3 border border-white/20 z-10 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></div>
-        </button>`;
+        const card = document.createElement('button');
+        card.className = "glass-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden";
+        card.onclick = () => selectForm(key);
+        card.innerHTML = `
+          <div class="space-y-0.5">
+            <span class="text-[10px] font-mono font-semibold text-slate-500 uppercase block">Form ${item.number}</span>
+            <h2 class="font-syne text-xl font-bold text-white ${item.hover.split(' ')[0]} transition-colors duration-200 pb-0.5">${item.name}</h2>
+            <p class="text-[11px] text-slate-400">${item.sub}</p>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-300 ${item.hover} transition-all shrink-0 ml-3 shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>`;
+        container.appendChild(card);
+      });
+
+      const customCard = document.createElement('button');
+      customCard.className = "glass-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden border border-white/20 bg-gradient-to-r from-zinc-800/40 via-transparent to-zinc-900/40 shadow-xl";
+      customCard.onclick = () => openCustomBuilder();
+      customCard.innerHTML = `
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2">
+            <h2 class="font-syne text-xl font-bold text-white group-hover:text-zinc-200 transition-colors duration-200 pb-0.5">Custom Setup</h2>
+            <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">NEW</span>
+          </div>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-700 to-zinc-900 flex items-center justify-center text-white group-hover:scale-105 transition-all shrink-0 ml-3 shadow-md border border-white/10">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </div>`;
+      container.appendChild(customCard);
     }
 
-    function openCustomBuilder() { renderCustomInputs(); updateSavedSetupsMenu(); selectedSavedSetupName = ""; document.getElementById('setup-dropdown-label').textContent = "Select setup..."; switchView('custom-builder-view'); }
-    const toggleSetupDropdown = () => document.getElementById('setup-dropdown-menu').classList.toggle('hidden');
+    function openCustomBuilder() {
+      renderCustomInputs();
+      updateSavedSetupsMenu();
+      selectedSavedSetupName = "";
+      document.getElementById('setup-dropdown-label').textContent = "Select setup...";
+      switchView('custom-builder-view');
+    }
+
+    function toggleSetupDropdown() {
+      const menu = document.getElementById('setup-dropdown-menu');
+      menu.classList.toggle('hidden');
+    }
 
     function updateSavedSetupsMenu() {
-      const menu = document.getElementById('setup-dropdown-menu'), keys = Object.keys(savedCustomSetups);
-      document.getElementById('saved-count').textContent = `${keys.length} saved`;
-      menu.innerHTML = keys.length === 0 ? '<div class="px-3 py-2 text-[11px] font-mono text-zinc-400">No saved setups yet</div>' : keys.map(name => `<button class="w-full text-left px-3 py-2 rounded-lg text-xs font-mono text-slate-200 hover:bg-white/10 truncate cursor-pointer transition-colors" onclick="selectedSavedSetupName='${name}';document.getElementById('setup-dropdown-label').textContent='${name}';this.parentElement.classList.add('hidden')">${name}</button>`).join('');
+      const menu = document.getElementById('setup-dropdown-menu');
+      const countSpan = document.getElementById('saved-count');
+      const keys = Object.keys(savedCustomSetups);
+      
+      countSpan.textContent = `${keys.length} saved`;
+      menu.innerHTML = '';
+      
+      if (keys.length === 0) {
+        menu.innerHTML = '<div class="px-3 py-2 text-[11px] font-mono text-slate-500">No saved setups yet</div>';
+        return;
+      }
+
+      keys.forEach(name => {
+        const item = document.createElement('button');
+        item.className = "w-full text-left px-3 py-2 rounded-lg text-xs font-mono text-slate-200 hover:bg-white/10 transition-colors truncate";
+        item.textContent = name;
+        item.onclick = () => {
+          selectedSavedSetupName = name;
+          document.getElementById('setup-dropdown-label').textContent = name;
+          menu.classList.add('hidden');
+        };
+        menu.appendChild(item);
+      });
     }
 
-    const openSaveModal = () => { document.getElementById('save-setup-input-name').value = ''; document.getElementById('save-modal').classList.remove('hidden'); document.body.classList.add('modal-open'); setTimeout(() => document.getElementById('save-setup-input-name').focus(), 100); };
-    const closeSaveModal = () => { document.getElementById('save-modal').classList.add('hidden'); document.body.classList.remove('modal-open'); };
+    function openSaveModal() {
+      document.getElementById('save-setup-input-name').value = '';
+      document.getElementById('save-modal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('save-setup-input-name').focus(), 100);
+    }
+
+    function closeSaveModal() {
+      document.getElementById('save-modal').classList.add('hidden');
+    }
 
     function confirmSaveSetup() {
-      const name = document.getElementById('save-setup-input-name').value.trim();
-      if (!name) { showCustomAlert("Setup Notice", "Please enter a setup name."); return; }
-      const valid = customSubjectsList.filter(s => s.name.trim() !== "");
-      if (valid.length === 0) { showCustomAlert("Setup Notice", "Please add at least one subject."); return; }
-      savedCustomSetups[name] = JSON.parse(JSON.stringify(valid));
+      const nameInput = document.getElementById('save-setup-input-name');
+      const name = nameInput.value.trim();
+      if (!name) {
+        alert("Please enter a setup name.");
+        return;
+      }
+      
+      const validSubjects = customSubjectsList.filter(s => s.name.trim() !== "");
+      if (validSubjects.length === 0) {
+        alert("Please add at least one subject before saving.");
+        return;
+      }
+
+      savedCustomSetups[name] = JSON.parse(JSON.stringify(validSubjects));
       localStorage.setItem('ihs_saved_setups', JSON.stringify(savedCustomSetups));
       selectedSavedSetupName = name;
       document.getElementById('setup-dropdown-label').textContent = name;
@@ -685,332 +474,264 @@
     }
 
     function loadSelectedSetup() {
-      if (!selectedSavedSetupName || !savedCustomSetups[selectedSavedSetupName]) { showCustomAlert("Setup Notice", "Please select a saved setup first."); return; }
+      if (!selectedSavedSetupName || !savedCustomSetups[selectedSavedSetupName]) {
+        alert("Please select a saved setup from the menu first.");
+        return;
+      }
       customSubjectsList = JSON.parse(JSON.stringify(savedCustomSetups[selectedSavedSetupName]));
       renderCustomInputs();
     }
 
     function deleteSelectedSetup() {
-      if (!selectedSavedSetupName || !savedCustomSetups[selectedSavedSetupName]) { showCustomAlert("Setup Notice", "Please select a saved setup first."); return; }
+      if (!selectedSavedSetupName || !savedCustomSetups[selectedSavedSetupName]) {
+        alert("Please select a saved setup from the menu first.");
+        return;
+      }
       if (confirm(`Delete setup "${selectedSavedSetupName}"?`)) {
         delete savedCustomSetups[selectedSavedSetupName];
         localStorage.setItem('ihs_saved_setups', JSON.stringify(savedCustomSetups));
-        selectedSavedSetupName = ""; document.getElementById('setup-dropdown-label').textContent = "Select setup...";
+        selectedSavedSetupName = "";
+        document.getElementById('setup-dropdown-label').textContent = "Select setup...";
         updateSavedSetupsMenu();
       }
     }
 
     function renderCustomInputs() {
-      document.getElementById('custom-subjects-inputs').innerHTML = customSubjectsList.map((subj, idx) => `
-        <div class="flex items-center gap-2 bg-white/[0.04] border border-white/15 rounded-xl p-2.5 shadow-inner">
-          <input type="text" value="${subj.name}" placeholder="Subject Name" oninput="customSubjectsList[${idx}].name=this.value" class="input-field w-full rounded-lg px-3 py-2 font-mono text-xs text-white"/>
-          <div class="flex items-center gap-1 shrink-0"><span class="text-[10px] font-mono text-zinc-300">Hrs:</span><input type="number" min="1" max="10" value="${subj.credits}" oninput="customSubjectsList[${idx}].credits=Number(this.value)" class="input-field w-12 rounded-lg px-2 py-2 font-mono text-xs text-center text-white"/></div>
-          <button onclick="removeCustomSubject(${idx})" class="text-zinc-400 p-1.5 rounded-lg shrink-0 cursor-pointer hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
-        </div>`).join('');
-    }
-
-    const addCustomSubjectRow = () => { customSubjectsList.push({ name: "New Subject", credits: 3 }); renderCustomInputs(); };
-    const removeCustomSubject = idx => { if (customSubjectsList.length <= 1) { showCustomAlert("Subject Limit", "You must have at least 1 subject."); return; } customSubjectsList.splice(idx, 1); renderCustomInputs(); };
-
-    let customTotalCreditsTarget = 30;
-    function launchCustomCalculator() {
-      activeFormKey = "custom";
-      const valid = customSubjectsList.filter(s => s.name.trim() !== "");
-      if (valid.length === 0) { showCustomAlert("Setup Notice", "Please enter at least one subject."); return; }
-      customTotalCreditsTarget = valid.reduce((sum, s) => sum + (Number(s.credits) || 0), 0);
-      loadCustomCalculator([{ name: "", hoursLabel: "", hours: 3, subjects: valid.map(s => ({ id: s.name.toLowerCase().replace(/\s+/g, '_'), name: s.name, customCredits: s.credits })) }], "Custom Progress Report", "bg-gradient-to-b from-zinc-200 via-zinc-500 to-zinc-900", "focus:border-white/30");
-    }
-
-    let semestersEnabled = false;
-    function toggleSemesterModeUI() {
-      semestersEnabled = !semestersEnabled;
-      const btn = document.getElementById('toggle-sem-mode-btn');
-      const wrapper = document.getElementById('semester-buttons-wrapper');
-      if (semestersEnabled) {
-        btn.textContent = "Disable Semesters";
-        btn.className = "py-1.5 px-3 rounded-xl text-xs font-mono font-bold btn-wave cursor-pointer shadow-sm";
-        wrapper.classList.remove('hidden');
-        setSemesterMode(1);
-      } else {
-        btn.textContent = "Enable Semesters";
-        btn.className = "py-1.5 px-3 rounded-xl text-xs font-mono font-bold bg-white/10 border border-white/20 text-zinc-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm";
-        wrapper.classList.add('hidden');
-        currentSemester = 1;
-        rebuildCalculatorDOM();
-        calculateCustomAverage();
-      }
-    }
-
-    function setSemesterMode(sem) {
-      if (currentSemester !== 'combined') {
-        saveCurrentSemesterInputs();
-      }
-      currentSemester = sem;
-      const b1 = document.getElementById('sem-1-btn');
-      const b2 = document.getElementById('sem-2-btn');
-      const bComb = document.getElementById('sem-comb-btn');
-      
-      b1.className = "py-2 rounded-xl text-xs font-mono font-bold text-zinc-400 hover:text-white bg-white/5 border border-white/15 transition-all cursor-pointer";
-      b2.className = "py-2 rounded-xl text-xs font-mono font-bold text-zinc-400 hover:text-white bg-white/5 border border-white/15 transition-all cursor-pointer";
-      bComb.className = "py-2 rounded-xl text-xs font-mono font-bold text-zinc-400 hover:text-white bg-white/5 border border-white/15 transition-all cursor-pointer";
-
-      if(sem === 1) {
-        b1.className = "py-2 rounded-xl text-xs font-mono font-bold btn-wave cursor-pointer shadow-sm";
-      } else if(sem === 2) {
-        b2.className = "py-2 rounded-xl text-xs font-mono font-bold btn-wave cursor-pointer shadow-sm";
-      } else {
-        bComb.className = "py-2 rounded-xl text-xs font-mono font-bold btn-wave cursor-pointer shadow-sm";
-      }
-
-      rebuildCalculatorDOM();
-      calculateCustomAverage();
-    }
-
-    function saveCurrentSemesterInputs() {
-      if(!activeFormKey || currentSemester === 'combined' || !semestersEnabled) return;
-      if(!semesterGrades[currentSemester]) semesterGrades[currentSemester] = {};
-      document.querySelectorAll('#subjects-container input').forEach(input => {
-        semesterGrades[currentSemester][input.id] = input.value;
+      const container = document.getElementById('custom-subjects-inputs');
+      container.innerHTML = '';
+      customSubjectsList.forEach((subj, idx) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center gap-2 bg-white/[0.02] border border-white/10 rounded-xl p-2.5";
+        row.innerHTML = `
+          <input type="text" value="${subj.name}" placeholder="Subject Name" oninput="customSubjectsList[${idx}].name = this.value" class="w-full bg-[#0d0d14] border border-white/10 focus:border-white/30 focus:outline-none rounded-lg px-3 py-2 font-mono text-xs text-white"/>
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="text-[10px] font-mono text-slate-400">Hrs:</span>
+            <input type="number" min="1" max="10" value="${subj.credits}" oninput="customSubjectsList[${idx}].credits = Number(this.value)" class="w-12 bg-[#0d0d14] border border-white/10 focus:border-white/30 focus:outline-none rounded-lg px-2 py-2 font-mono text-xs text-center text-white"/>
+          </div>
+          <button onclick="removeCustomSubject(${idx})" class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition-colors shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>`;
+        container.appendChild(row);
       });
     }
 
-    function rebuildCalculatorDOM() {
-      const container = document.getElementById('subjects-container');
-      const header = document.getElementById('grades-table-header');
-      if (semestersEnabled && currentSemester === 'combined') {
-        header.innerHTML = `
-          <span class="col-span-3">Subject</span>
-          <span class="col-span-1 text-center">Hrs</span>
-          <span class="col-span-3 text-right">Sem 1</span>
-          <span class="col-span-3 text-right">Sem 2</span>
-          <span class="col-span-2 text-right">Final</span>
-        `;
-        container.innerHTML = storedCategoriesJSON.map(cat => `
-          <div class="space-y-3">
-            <div class="flex items-center justify-between border-b border-white/10 pb-1"><span class="font-syne text-sm font-bold text-white pb-0.5">${cat.name}</span><span class="text-[10px] font-mono text-zinc-300">${cat.hoursLabel}</span></div>
-            ${cat.subjects.map(subj => {
-              const id = `${activeFormKey}_${subj.id}`;
-              const val1 = semesterGrades[1][id] || '';
-              const val2 = semesterGrades[2][id] || '';
-              return `<div class="grid grid-cols-12 items-center gap-1 sm:gap-1.5 py-2 relative">
-                <label class="col-span-3 text-xs text-slate-200 font-medium truncate">${subj.name}</label>
-                <div class="col-span-1 text-center font-mono text-xs text-zinc-300 font-semibold">${cat.hours}</div>
-                <div class="col-span-3"><input type="text" inputmode="decimal" id="comb_1_${id}" data-base-id="${id}" value="${val1}" placeholder="0-100" oninput="debounceCombinedInput(this, 1)" class="input-field w-full rounded-lg px-1 py-1 text-right font-mono text-xs text-white placeholder-zinc-500"/></div>
-                <div class="col-span-3"><input type="text" inputmode="decimal" id="comb_2_${id}" data-base-id="${id}" value="${val2}" placeholder="0-100" oninput="debounceCombinedInput(this, 2)" class="input-field w-full rounded-lg px-1 py-1 text-right font-mono text-xs text-white placeholder-zinc-500"/></div>
-                <div class="col-span-2 text-right font-mono text-xs font-semibold text-slate-200 truncate" id="comb_points_${id}">0.00</div>
-              </div>`;
-            }).join('')}
-          </div>`).join('');
-      } else {
-        header.innerHTML = `
-          <span class="col-span-5 sm:col-span-6">Subject</span>
-          <span class="col-span-2 text-center">Hrs</span>
-          <span class="col-span-3 text-right">Grade</span>
-          <span class="col-span-2 text-right">Points</span>
-        `;
-        container.innerHTML = storedCategoriesJSON.map(cat => `
-          <div class="space-y-3">
-            <div class="flex items-center justify-between border-b border-white/10 pb-1"><span class="font-syne text-sm font-bold text-white pb-0.5">${cat.name}</span><span class="text-[10px] font-mono text-zinc-300">${cat.hoursLabel}</span></div>
-            ${cat.subjects.map(subj => {
-              const id = `${activeFormKey}_${subj.id}`;
-              return `<div class="grid grid-cols-12 items-center gap-1.5 sm:gap-2 py-2 relative">
-                <label for="${id}" class="col-span-5 sm:col-span-6 text-xs text-slate-200 font-medium truncate">${subj.name}</label>
-                <div class="col-span-2 text-center font-mono text-xs text-zinc-300 font-semibold">${cat.hours}</div>
-                <div class="col-span-3 relative"><input type="text" inputmode="decimal" id="${id}" data-hours="${cat.hours}" data-subj-name="${subj.name}" placeholder="0-100" oninput="debounceCalculate()" class="input-field w-full rounded-lg px-2 sm:px-3 text-right font-mono text-xs text-white placeholder-zinc-500"/></div>
-                <div class="col-span-2 text-right font-mono text-xs font-semibold text-slate-200" id="points_${id}">0.00</div>
-                <div id="error_${id}" class="hidden col-span-12 text-[10px] font-mono text-rose-400 text-right pr-2 font-semibold pt-0.5">Invalid (0-100)</div>
-              </div>`;
-            }).join('')}
-          </div>`).join('');
-        if(semestersEnabled) {
-          const semData = semesterGrades[currentSemester] || {};
-          document.querySelectorAll('#subjects-container input').forEach(input => {
-            if(semData[input.id] !== undefined) input.value = semData[input.id];
-          });
-        }
+    function addCustomSubjectRow() {
+      customSubjectsList.push({ name: "New Subject", credits: 3 });
+      renderCustomInputs();
+    }
+
+    function removeCustomSubject(idx) {
+      if (customSubjectsList.length <= 1) {
+        alert("You must have at least 1 subject in your custom calculator.");
+        return;
       }
+      customSubjectsList.splice(idx, 1);
+      renderCustomInputs();
     }
 
-    function debounceCombinedInput(el, semNum) {
-      const baseId = el.dataset.baseId;
-      if(!semesterGrades[semNum]) semesterGrades[semNum] = {};
-      semesterGrades[semNum][baseId] = el.value;
-      debounceCalculate();
+    let customTotalCreditsTarget = 30;
+
+    function launchCustomCalculator() {
+      activeFormKey = "custom";
+      const validSubjects = customSubjectsList.filter(s => s.name.trim() !== "");
+      if (validSubjects.length === 0) {
+        alert("Please enter at least one valid subject name.");
+        return;
+      }
+
+      customTotalCreditsTarget = validSubjects.reduce((sum, s) => sum + (Number(s.credits) || 0), 0);
+
+      const customCategory = {
+        name: "",
+        hoursLabel: "",
+        hours: 3,
+        subjects: validSubjects.map(s => ({ id: s.name.toLowerCase().replace(/\s+/g, '_'), name: s.name, customCredits: s.credits }))
+      };
+
+      loadCustomCalculator([customCategory], "Custom Progress Report", "bg-gradient-to-b from-zinc-200 via-zinc-500 to-zinc-900", "focus:border-white/30");
     }
 
-    let storedCategoriesJSON = [];
     function loadCustomCalculator(categories, title, barClass, focusClass) {
-      storedCategoriesJSON = categories;
       document.getElementById('calc-title').textContent = title;
-      document.getElementById('calc-accent-bar').className = `w-2.5 h-10 rounded-full shrink-0 mt-0.5 ${barClass} shadow-sm`;
+      document.getElementById('calc-accent-bar').className = `w-2.5 h-10 rounded-full shrink-0 mt-0.5 shadow-lg ${barClass}`;
       document.getElementById('back-button-text').textContent = "Back to custom setup";
-      document.getElementById('calc-desc').textContent = `Enter each grade from 0 to 100. Divided by total credits (${customTotalCreditsTarget}).`;
-      semestersEnabled = false;
-      document.getElementById('toggle-sem-mode-btn').textContent = "Enable Semesters";
-      document.getElementById('toggle-sem-mode-btn').className = "py-1.5 px-3 rounded-xl text-xs font-mono font-bold bg-white/10 border border-white/20 text-zinc-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm";
-      document.getElementById('semester-buttons-wrapper').classList.add('hidden');
-      currentSemester = 1;
-      rebuildCalculatorDOM();
+      document.getElementById('calc-desc').textContent = `Enter each grade as a percentage from 0 to 100. Each grade is multiplied by its credit hours, then divided by your total credits (${customTotalCreditsTarget}).`;
+
+      const container = document.getElementById('subjects-container');
+      container.innerHTML = '';
+      
+      categories.forEach(cat => {
+        const block = document.createElement('div');
+        block.className = 'space-y-3';
+        let subHtml = '';
+        
+        cat.subjects.forEach(subj => {
+          const id = `custom_${subj.id}`;
+          const hrs = subj.customCredits || 3;
+          subHtml += `
+            <div class="grid grid-cols-12 items-center gap-1.5 sm:gap-2 py-2 relative">
+              <label for="${id}" class="col-span-5 sm:col-span-6 text-xs text-slate-300 font-medium truncate">${subj.name}</label>
+              <div class="col-span-2 text-center font-mono text-xs text-slate-400 font-semibold">${hrs}</div>
+              <div class="col-span-3 relative">
+                <input type="text" inputmode="decimal" id="${id}" data-hours="${hrs}" data-subj-name="${subj.name}" placeholder="0-100" oninput="calculateCustomAverage()" class="input-field w-full bg-[#0d0d14] border border-white/10 ${focusClass} focus:outline-none rounded-lg px-2 sm:px-3 text-right font-mono text-xs text-white placeholder-slate-600"/>
+              </div>
+              <div class="col-span-2 text-right font-mono text-xs font-semibold text-slate-300" id="points_${id}">0.00</div>
+              <div id="error_${id}" class="hidden col-span-12 text-[10px] font-mono text-rose-400 text-right pr-2 font-semibold pt-0.5">Invalid (0-100)</div>
+            </div>`;
+        });
+        block.innerHTML = subHtml;
+        container.appendChild(block);
+      });
       calculateCustomAverage();
       switchView('calculator-view');
     }
 
-    function selectForm(key) { activeFormKey = key; const f = FORMS[key]; f.direct ? loadStandardCalculator(key, GEN_CATS, `${f.name} Progress Report`, f.bar, f.border) : showTracksView(key); }
+    function selectForm(key) {
+      activeFormKey = key;
+      const f = FORMS[key];
+      f.direct ? loadStandardCalculator(key, GEN_CATS, `${f.name} Progress Report`, f.bar, f.border) : showTracksView(key);
+    }
 
     function showTracksView(key) {
       const f = FORMS[key];
       document.getElementById('tracks-view-title').textContent = f.name;
-      document.getElementById('tracks-grid').innerHTML = f.tracks.map(t => `
-        <button class="btn-static-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden" onclick="loadStandardCalculator('${key}', TRACKS['${t.id}'], '${f.name} ${t.name} Progress Report', '${f.bar}', '${f.border}')">
-          <div class="space-y-0.5 z-10"><h2 class="font-syne text-xl font-bold text-white ${f.hover} pb-0.5">${t.name}</h2><p class="text-[11px] font-mono text-zinc-300">${t.subjectsCount} subjects, ${t.creditHours} credit hours</p></div>
-          <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 ml-3 z-10 border border-white/20 shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m-7 7H3"/></svg></div>
-        </button>`).join('');
+
+      const grid = document.getElementById('tracks-grid');
+      grid.innerHTML = '';
+      f.tracks.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = "glass-card glass-card-interactive rounded-xl p-4 text-left flex items-center justify-between w-full group relative overflow-hidden border border-white/10";
+        btn.onclick = () => loadStandardCalculator(key, TRACKS[t.id], `${f.name} ${t.name} Progress Report`, f.bar, f.border);
+        btn.innerHTML = `
+          <div class="space-y-0.5 flex items-center gap-2">
+            <div>
+              <div class="flex items-center gap-2 pb-0.5">
+                <h2 class="font-syne text-xl font-bold text-white ${f.hover.split(' ')[0]} transition-colors">${t.name}</h2>
+                ${t.isNew ? '<span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">NEW</span>' : ''}
+              </div>
+              <p class="text-[11px] font-mono text-slate-400">${t.subjectsCount} subjects, ${t.creditHours} credit hours</p>
+            </div>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-300 ${f.hover} transition-all shrink-0 ml-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </div>`;
+        grid.appendChild(btn);
+      });
       switchView('tracks-view');
     }
 
     function loadStandardCalculator(formKey, categories, title, barClass, focusClass) {
       customTotalCreditsTarget = 30;
-      storedCategoriesJSON = categories;
       document.getElementById('calc-title').textContent = title;
-      document.getElementById('calc-accent-bar').className = `w-2.5 h-10 rounded-full shrink-0 mt-0.5 ${barClass} shadow-sm`;
+      document.getElementById('calc-accent-bar').className = `w-2.5 h-10 rounded-full shrink-0 mt-0.5 shadow-lg ${barClass}`;
       document.getElementById('back-button-text').textContent = FORMS[formKey].direct ? "Back to form selection" : "Back to classes";
-      document.getElementById('calc-desc').textContent = "Enter grades as percentages from 0 to 100. Divided by 30 total credits.";
-      semestersEnabled = false;
-      document.getElementById('toggle-sem-mode-btn').textContent = "Enable Semesters";
-      document.getElementById('toggle-sem-mode-btn').className = "py-1.5 px-3 rounded-xl text-xs font-mono font-bold bg-white/10 border border-white/20 text-zinc-300 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-sm";
-      document.getElementById('semester-buttons-wrapper').classList.add('hidden');
-      currentSemester = 1;
-      rebuildCalculatorDOM();
+      document.getElementById('calc-desc').textContent = "Enter each grade as a percentage from 0 to 100. Each grade is multiplied by its credit hours, then the total is divided by 30.";
+
+      const container = document.getElementById('subjects-container');
+      container.innerHTML = '';
+      categories.forEach(cat => {
+        const block = document.createElement('div');
+        block.className = 'space-y-3';
+        let subHtml = `<div class="flex items-center justify-between border-b border-white/5 pb-1"><span class="font-syne text-sm font-bold text-white pb-0.5">${cat.name}</span><span class="text-[10px] font-mono text-slate-400">${cat.hoursLabel}</span></div>`;
+        cat.subjects.forEach(subj => {
+          const id = `${formKey}_${subj.id}`;
+          subHtml += `
+            <div class="grid grid-cols-12 items-center gap-1.5 sm:gap-2 py-2 relative">
+              <label for="${id}" class="col-span-5 sm:col-span-6 text-xs text-slate-300 font-medium truncate">${subj.name}</label>
+              <div class="col-span-2 text-center font-mono text-xs text-slate-400 font-semibold">${cat.hours}</div>
+              <div class="col-span-3 relative">
+                <input type="text" inputmode="decimal" id="${id}" data-hours="${cat.hours}" data-subj-name="${subj.name}" placeholder="0-100" oninput="calculateCustomAverage()" class="input-field w-full bg-[#0d0d14] border border-white/10 ${focusClass} focus:outline-none rounded-lg px-2 sm:px-3 text-right font-mono text-xs text-white placeholder-slate-600"/>
+              </div>
+              <div class="col-span-2 text-right font-mono text-xs font-semibold text-slate-300" id="points_${id}">0.00</div>
+              <div id="error_${id}" class="hidden col-span-12 text-[10px] font-mono text-rose-400 text-right pr-2 font-semibold pt-0.5">Invalid (0-100)</div>
+            </div>`;
+        });
+        block.innerHTML = subHtml;
+        container.appendChild(block);
+      });
       calculateCustomAverage();
       switchView('calculator-view');
     }
 
     function autofillGrades() {
-      const sampleGrades = [88, 92, 78, 85, 90, 82, 86, 94, 79, 91, 84, 87, 83];
-      if (semestersEnabled && currentSemester === 'combined') {
-        let idx = 0;
-        storedCategoriesJSON.forEach(cat => cat.subjects.forEach(subj => {
-          const id = `${activeFormKey}_${subj.id}`;
-          semesterGrades[1][id] = sampleGrades[idx % sampleGrades.length];
-          semesterGrades[2][id] = sampleGrades[(idx + 2) % sampleGrades.length];
-          idx++;
-        }));
-        rebuildCalculatorDOM();
-      } else {
-        document.querySelectorAll('#subjects-container input').forEach((input, index) => input.value = sampleGrades[index % sampleGrades.length]);
-        saveCurrentSemesterInputs();
-      }
+      const inputs = document.querySelectorAll('#subjects-container input');
+      inputs.forEach((input, index) => {
+        const sampleGrades = [88, 92, 78, 85, 90, 82, 86, 94, 79, 91, 84, 87, 83];
+        input.value = sampleGrades[index % sampleGrades.length];
+      });
       calculateCustomAverage();
     }
 
     function calculateCustomAverage() {
       if (!activeFormKey) return;
-      let totalPts = 0, creds = 0, entered = 0, count = 0, hasErr = false;
+      const inputs = document.querySelectorAll('#subjects-container input');
+      let totalPts = 0, creds = 0, entered = 0, count = inputs.length, hasErr = false;
 
-      if (semestersEnabled && currentSemester === 'combined') {
-        let totalCount = 0;
-        storedCategoriesJSON.forEach(cat => cat.subjects.forEach(subj => totalCount++));
-        count = totalCount * 2;
-
-        storedCategoriesJSON.forEach(cat => {
-          cat.subjects.forEach(subj => {
-            const id = `${activeFormKey}_${subj.id}`;
-            const hrs = cat.hours;
-            const v1 = (semesterGrades[1][id] !== undefined) ? semesterGrades[1][id].trim() : '';
-            const v2 = (semesterGrades[2][id] !== undefined) ? semesterGrades[2][id].trim() : '';
-            const pDisp = document.getElementById(`comb_points_${id}`);
-
-            let subPts = 0, subValidCount = 0;
-            if (v1 !== "") {
-              const val1 = Number(v1);
-              if (isNaN(val1) || val1 < 0 || val1 > 100 || !/^\d+(\.\d+)?$/.test(v1)) {
-                hasErr = true;
-              } else {
-                subPts += val1 * hrs;
-                subValidCount++;
-                entered++;
-              }
-            }
-            if (v2 !== "") {
-              const val2 = Number(v2);
-              if (isNaN(val2) || val2 < 0 || val2 > 100 || !/^\d+(\.\d+)?$/.test(v2)) {
-                hasErr = true;
-              } else {
-                subPts += val2 * hrs;
-                subValidCount++;
-                entered++;
-              }
-            }
-
-            if (subValidCount > 0) {
-              const avgSub = subPts / (subValidCount * hrs);
-              const combinedPts = avgSub * hrs;
-              if(pDisp) pDisp.textContent = combinedPts.toFixed(2);
-              totalPts += combinedPts;
-              creds += hrs;
-            } else {
-              if(pDisp) pDisp.textContent = "0.00";
-            }
-          });
-        });
-      } else {
-        const inputs = document.querySelectorAll('#subjects-container input');
-        count = inputs.length;
-        inputs.forEach(input => {
-          const id = input.id, hrs = parseFloat(input.dataset.hours) || 0, valStr = input.value.trim();
-          const pDisp = document.getElementById(`points_${id}`), errDisp = document.getElementById(`error_${id}`);
-          if (valStr === "") {
-            input.className = input.className.replace(/border-rose-500 bg-rose-500\/20 text-rose-300/g, '') + ' border-white/25 bg-[#060609] text-white';
-            if(errDisp) errDisp.classList.add('hidden'); if(pDisp) pDisp.textContent = "0.00";
+      inputs.forEach(input => {
+        const id = input.id, hrs = parseFloat(input.dataset.hours) || 0, valStr = input.value.trim();
+        const pDisp = document.getElementById(`points_${id}`), errDisp = document.getElementById(`error_${id}`);
+        if (valStr === "") {
+          input.className = input.className.replace(/border-rose-500 bg-rose-500\/10 text-rose-300/g, '') + ' border-white/10 bg-[#0d0d14] text-white';
+          errDisp.classList.add('hidden');
+          pDisp.textContent = "0.00";
+        } else {
+          const val = Number(valStr);
+          if (isNaN(val) || val < 0 || val > 100 || !/^\d+(\.\d+)?$/.test(valStr)) {
+            hasErr = true;
+            input.className = input.className.replace(/border-white\/10 bg-\[#0d0d14\] text-white/g, '') + ' border-rose-500 bg-rose-500/10 text-rose-300';
+            errDisp.classList.remove('hidden');
+            pDisp.textContent = "—";
           } else {
-            const val = Number(valStr);
-            if (isNaN(val) || val < 0 || val > 100 || !/^\d+(\.\d+)?$/.test(valStr)) {
-              hasErr = true;
-              input.className = input.className.replace(/border-white\/25 bg-\[#060609\] text-white/g, '') + ' border-rose-500 bg-rose-500/20 text-rose-300';
-              if(errDisp) errDisp.classList.remove('hidden'); if(pDisp) pDisp.textContent = "—";
-            } else {
-              input.className = input.className.replace(/border-rose-500 bg-rose-500\/20 text-rose-300/g, '') + ' border-white/25 bg-[#060609] text-white';
-              if(errDisp) errDisp.classList.add('hidden');
-              const pts = val * hrs; if(pDisp) pDisp.textContent = pts.toFixed(2);
-              totalPts += pts; creds += hrs; entered++;
-            }
+            input.className = input.className.replace(/border-rose-500 bg-rose-500\/10 text-rose-300/g, '') + ' border-white/10 bg-[#0d0d14] text-white';
+            errDisp.classList.add('hidden');
+            const pts = val * hrs;
+            pDisp.textContent = pts.toFixed(2);
+            totalPts += pts;
+            creds += hrs;
+            entered++;
           }
-        });
-      }
+        }
+      });
 
       const avg = creds > 0 ? (totalPts / creds) : 0;
       document.getElementById('stat-credits').textContent = `${creds} / ${customTotalCreditsTarget}`;
       document.getElementById('stat-points').textContent = totalPts.toFixed(2);
       
-      const badge = document.getElementById('final-average-badge'), avgBox = document.getElementById('average-box'), star = document.getElementById('honor-roll-star');
-      const btn = document.getElementById('analytics-btn'), icon = document.getElementById('analytics-icon'), btnTxt = document.getElementById('analytics-btn-text');
+      const badge = document.getElementById('final-average-badge');
+      const avgBox = document.getElementById('average-box');
+      const star = document.getElementById('honor-roll-star');
+      const btn = document.getElementById('analytics-btn');
+      const icon = document.getElementById('analytics-icon');
+      const btnTxt = document.getElementById('analytics-btn-text');
+
       badge.textContent = avg.toFixed(2) + '%';
 
       if (avg >= 85 && entered === count && !hasErr) {
-        avgBox.className = "glass-card honor-roll-glow rounded-xl p-4 space-y-3";
-        badge.className = "font-mono text-xl font-extrabold text-amber-300 drop-shadow";
+        avgBox.className = "glass-card honor-roll-glow rounded-xl p-4 space-y-3 transition-all duration-500";
+        badge.className = "font-mono text-xl font-extrabold text-amber-300";
         star.classList.remove('hidden');
       } else {
-        avgBox.className = "bg-white/[0.05] border border-white/15 rounded-xl p-4 space-y-3 shadow-inner";
+        avgBox.className = "bg-gradient-to-br from-white/[0.05] via-white/[0.02] to-white/[0.01] border border-white/10 rounded-xl p-4 space-y-3 transition-all duration-500";
         badge.className = "font-mono text-xl font-extrabold text-white";
         star.classList.add('hidden');
       }
 
       if (entered === count && !hasErr) {
         btn.disabled = false;
-        btn.className = "btn-wave w-full py-3 rounded-xl text-xs font-mono font-extrabold flex items-center justify-center gap-2 cursor-pointer shadow-xl border border-white/60";
+        btn.className = "w-full py-3 rounded-xl bg-gradient-to-r from-white via-zinc-200 to-zinc-400 hover:from-zinc-100 hover:to-zinc-300 text-xs font-mono text-black font-extrabold transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-xl border border-white/40";
         icon.className = "w-4 h-4 text-black";
         icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>`;
         btnTxt.textContent = "View Grade Insights & Analytics";
       } else {
         btn.disabled = true;
-        btn.className = "w-full py-3 rounded-xl bg-white/[0.04] border border-white/15 text-xs font-mono text-zinc-400 font-bold flex items-center justify-center gap-2 cursor-not-allowed";
-        icon.className = "w-4 h-4 text-zinc-500";
+        btn.className = "w-full py-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs font-mono text-slate-500 transition-all font-bold flex items-center justify-center gap-2 cursor-not-allowed";
+        icon.className = "w-4 h-4 text-slate-600";
         icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>`;
         btnTxt.textContent = `Enter All Grades to View Analytics (${entered}/${count})`;
       }
 
-      const statusMsg = document.getElementById('status-message'), rem = count - entered;
+      const statusMsg = document.getElementById('status-message');
+      const rem = count - entered;
       if (hasErr) statusMsg.innerHTML = `<span class="text-rose-400 font-semibold">Please fix invalid grade entries (0 to 100).</span>`;
       else if (entered === 0) statusMsg.textContent = `Enter subject grades to calculate your average.`;
       else if (rem > 0) statusMsg.textContent = `Enter remaining ${rem} subject grade${rem > 1 ? 's' : ''} to view analytics.`;
@@ -1019,74 +740,109 @@
 
     function openStatsModal() {
       const modal = document.getElementById('stats-modal'), body = document.getElementById('stats-modal-body');
-      const titleLabel = (semestersEnabled && currentSemester === 'combined') ? 'Final Across 2 Semesters' : `Semester ${currentSemester}`;
-      document.getElementById('stats-modal-title').textContent = `Comprehensive Grade Analytics (${titleLabel})`;
-      
+
       let entries = [], totalPts = 0, totalCreds = 0;
-      if (semestersEnabled && currentSemester === 'combined') {
-        storedCategoriesJSON.forEach(cat => {
-          cat.subjects.forEach(subj => {
-            const id = `${activeFormKey}_${subj.id}`;
-            const hrs = cat.hours;
-            const v1 = (semesterGrades[1][id] !== undefined) ? Number(semesterGrades[1][id]) : NaN;
-            const v2 = (semesterGrades[2][id] !== undefined) ? Number(semesterGrades[2][id]) : NaN;
-            let subPts = 0, validC = 0;
-            if(!isNaN(v1) && v1 >= 0 && v1 <= 100) { subPts += v1 * hrs; validC++; }
-            if(!isNaN(v2) && v2 >= 0 && v2 <= 100) { subPts += v2 * hrs; validC++; }
-            if(validC > 0) {
-              const avgGrade = subPts / (validC * hrs);
-              const pts = avgGrade * hrs;
-              entries.push({ name: subj.name, grade: avgGrade, hours: hrs, points: pts });
-              totalPts += pts;
-              totalCreds += hrs;
-            }
-          });
-        });
-      } else {
-        document.querySelectorAll('#subjects-container input').forEach(input => {
-          const val = Number(input.value.trim()), hrs = parseFloat(input.dataset.hours) || 0, name = input.dataset.subjName;
-          if (input.value.trim() !== "" && !isNaN(val) && val >= 0 && val <= 100) {
-            entries.push({ name, grade: val, hours: hrs, points: val * hrs });
-            totalPts += val * hrs; totalCreds += hrs;
-          }
-        });
-      }
+      document.querySelectorAll('#subjects-container input').forEach(input => {
+        const val = Number(input.value.trim()), hrs = parseFloat(input.dataset.hours) || 0, name = input.dataset.subjName;
+        if (input.value.trim() !== "" && !isNaN(val) && val >= 0 && val <= 100) {
+          entries.push({ name, grade: val, hours: hrs, points: val * hrs });
+          totalPts += val * hrs;
+          totalCreds += hrs;
+        }
+      });
 
       const currAvg = totalCreds > 0 ? (totalPts / totalCreds) : 0;
       entries.forEach(i => i.impact = currAvg - ((totalPts - i.points) / (totalCreds - i.hours)));
       entries.sort((a, b) => b.impact - a.impact);
+      
       const top = entries[0], dragging = entries.filter(i => i.grade < currAvg).sort((a, b) => a.impact - b.impact);
       let gpa4 = currAvg >= 90 ? 4.0 : currAvg >= 80 ? 3.0 + (currAvg - 80)*0.1 : currAvg >= 70 ? 2.0 + (currAvg - 70)*0.1 : currAvg >= 60 ? 1.0 + (currAvg - 60)*0.1 : 0.0;
 
       body.innerHTML = `
         <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-          <div class="bg-white/[0.05] border border-white/15 rounded-xl p-3.5 flex flex-col justify-center shadow-inner"><span class="text-zinc-300 text-[9px] uppercase font-semibold pb-1">Average</span><span class="text-base sm:text-lg font-syne font-extrabold ${currAvg >= 85 ? 'text-amber-300' : 'text-white'} tracking-tight">${currAvg.toFixed(2)}%</span></div>
-          <div class="bg-white/[0.05] border border-white/15 rounded-xl p-3.5 flex flex-col justify-center shadow-inner"><span class="text-zinc-300 text-[9px] uppercase font-semibold pb-1">4.0 Scale GPA</span><span class="text-base sm:text-lg font-syne font-extrabold text-white tracking-tight">${gpa4.toFixed(2)}</span></div>
+          <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 flex flex-col justify-center">
+            <span class="text-slate-400 text-[9px] uppercase font-semibold pb-1">Final Average</span>
+            <span class="text-base sm:text-lg font-syne font-extrabold ${currAvg >= 85 ? 'text-amber-300' : 'text-white'} tracking-tight">${currAvg.toFixed(2)}%</span>
+          </div>
+          <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 flex flex-col justify-center">
+            <span class="text-slate-400 text-[9px] uppercase font-semibold pb-1">4.0 Scale GPA</span>
+            <span class="text-base sm:text-lg font-syne font-extrabold text-white tracking-tight">${gpa4.toFixed(2)}</span>
+          </div>
         </div>
-        ${currAvg >= 85 ? `<div class="bg-amber-500/15 border border-amber-500/40 rounded-xl p-3.5 space-y-1 shadow-inner"><div class="flex items-center gap-2 pb-0.5"><span class="text-amber-300 text-base">⭐</span><span class="text-xs font-syne font-bold text-amber-300">Honor Roll Status Met</span></div><p class="text-[11px] text-slate-200 leading-relaxed">Your overall weighted average is <strong class="text-white">${currAvg.toFixed(2)}%</strong>, successfully satisfying the official 85% honor roll benchmark.</p></div>` : `<div class="bg-white/[0.05] border border-white/15 rounded-xl p-3.5 space-y-1.5 shadow-inner"><div class="flex items-center justify-between pb-0.5"><span class="text-xs font-syne font-bold text-white">Honor Roll Target (>85%)</span><span class="text-xs font-mono font-bold text-amber-400">${(85 - currAvg).toFixed(2)}% away</span></div><p class="text-[11px] text-slate-200 leading-relaxed">You need approximately <strong class="text-white">${Math.max(0, 85 * totalCreds - totalPts).toFixed(1)}</strong> more weighted credit points to achieve an 85% average.</p></div>`}
+
+        ${currAvg >= 85 ? `
+          <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 space-y-1">
+            <div class="flex items-center gap-2 pb-0.5">
+              <span class="text-amber-300 text-base">⭐</span>
+              <span class="text-xs font-syne font-bold text-amber-300">Honor Roll Status Met</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              Your overall weighted average is <strong class="text-white">${currAvg.toFixed(2)}%</strong>, successfully satisfying the official 85% honor roll benchmark.
+            </p>
+          </div>
+        ` : `
+          <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3.5 space-y-1.5">
+            <div class="flex items-center justify-between pb-0.5">
+              <span class="text-xs font-syne font-bold text-white">Honor Roll Target (>85%)</span>
+              <span class="text-xs font-mono font-bold text-amber-400">${(85 - currAvg).toFixed(2)}% away</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              You need approximately <strong class="text-white">${Math.max(0, 85 * totalCreds - totalPts).toFixed(1)}</strong> more weighted credit points across your remaining courses to achieve an 85% average.
+            </p>
+          </div>
+        `}
+
         <div class="space-y-3 pt-1">
-          <span class="text-[10px] font-mono uppercase text-zinc-300 font-bold tracking-wider block pb-0.5">Detailed Academic Performance</span>
-          <div class="bg-white/[0.04] border border-white/15 rounded-xl p-3.5 text-xs space-y-1.5 shadow-inner"><div class="flex items-center justify-between pb-0.5"><span class="text-[10px] font-mono text-zinc-300 uppercase font-bold">Highest Impact Course</span><span class="font-mono font-bold text-white">+${top.impact.toFixed(2)}%</span></div><p class="font-bold text-white">${top.name} (${top.hours} Credits) — <span class="text-white font-mono">${top.grade.toFixed(1)}%</span></p></div>
-          ${dragging.length === 0 ? `<div class="bg-white/[0.04] border border-white/15 rounded-xl p-3.5 text-xs space-y-1 shadow-inner"><span class="text-[10px] font-mono text-zinc-300 uppercase font-bold block pb-0.5">Grade Drag Analysis</span><p class="text-[11px] text-slate-200 leading-relaxed">Fantastic work! None of your current grades are dragging your cumulative average down below your standing.</p></div>` : `<div class="space-y-1"><span class="text-[10px] font-mono text-rose-400 uppercase font-bold block pb-0.5">Courses Dragging Average Down (${dragging.length})</span>${dragging.map(s => `<div class="bg-rose-500/10 border border-rose-500/30 rounded-xl p-3 text-xs space-y-1 mt-2 shadow-inner"><div class="flex items-center justify-between pb-0.5"><span class="font-bold text-white">${s.name} (${s.hours} Credits)</span><span class="font-mono font-bold text-rose-400">${s.grade.toFixed(1)}%</span></div><p class="text-[10px] text-slate-200">Pulls average down by <strong class="text-rose-300">${Math.abs(s.impact).toFixed(2)}%</strong>.</p></div>`).join('')}</div>`}
+          <span class="text-[10px] font-mono uppercase text-slate-400 font-bold tracking-wider block pb-0.5">Detailed Academic Performance</span>
+          
+          <div class="bg-white/[0.02] border border-white/10 rounded-xl p-3.5 text-xs space-y-1.5">
+            <div class="flex items-center justify-between pb-0.5">
+              <span class="text-[10px] font-mono text-slate-400 uppercase font-bold">Highest Impact Course</span>
+              <span class="font-mono font-bold text-slate-200">+${top.impact.toFixed(2)}%</span>
+            </div>
+            <p class="font-bold text-white">${top.name} (${top.hours} Credits) — <span class="text-slate-200 font-mono">${top.grade.toFixed(1)}%</span></p>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              This subject carries significant credit weight and is providing the strongest boost to your cumulative score.
+            </p>
+          </div>
+
+          ${dragging.length === 0 ? `
+            <div class="bg-white/[0.02] border border-white/10 rounded-xl p-3.5 text-xs space-y-1">
+              <span class="text-[10px] font-mono text-slate-400 uppercase font-bold block pb-0.5">Grade Drag Analysis</span>
+              <p class="text-[11px] text-slate-300 leading-relaxed">
+                Fantastic work! None of your current grades are dragging your cumulative average down below your standing of <strong class="text-white">${currAvg.toFixed(2)}%</strong>.
+              </p>
+            </div>
+          ` : `
+            <div class="space-y-1">
+              <span class="text-[10px] font-mono text-rose-400 uppercase font-bold block pb-0.5">Courses Dragging Average Down (${dragging.length})</span>
+              ${dragging.map(s => `
+                <div class="bg-rose-500/5 border border-rose-500/20 rounded-xl p-3 text-xs space-y-1 mt-2">
+                  <div class="flex items-center justify-between pb-0.5">
+                    <span class="font-bold text-white">${s.name} (${s.hours} Credits)</span>
+                    <span class="font-mono font-bold text-rose-400">${s.grade.toFixed(1)}%</span>
+                  </div>
+                  <p class="text-[10px] text-slate-300">Impact: Pulls your overall standing down by approximately <strong class="text-rose-300">${Math.abs(s.impact).toFixed(2)}%</strong> due to its credit weighting.</p>
+                </div>
+              `).join('')}
+            </div>
+          `}
         </div>`;
-      modal.classList.remove('hidden'); document.body.classList.add('modal-open');
+      modal.classList.remove('hidden');
     }
 
-    const closeStatsModal = () => { document.getElementById('stats-modal').classList.add('hidden'); document.body.classList.remove('modal-open'); };
-    const clearGrades = () => {
-      if (semestersEnabled && currentSemester === 'combined') {
-        semesterGrades[1] = {};
-        semesterGrades[2] = {};
-        rebuildCalculatorDOM();
-      } else {
-        if(semesterGrades[currentSemester]) semesterGrades[currentSemester] = {};
-        document.querySelectorAll('#subjects-container input').forEach(i => i.value = '');
-      }
-      calculateCustomAverage();
-    };
+    function closeStatsModal() { document.getElementById('stats-modal').classList.add('hidden'); }
+    function clearGrades() { document.querySelectorAll('#subjects-container input').forEach(i => i.value = ''); calculateCustomAverage(); }
     function switchView(id) { ['selection-view', 'custom-builder-view', 'tracks-view', 'calculator-view'].forEach(v => document.getElementById(v).classList.add('hidden')); document.getElementById(id).classList.remove('hidden', 'view-enter'); void document.getElementById(id).offsetWidth; document.getElementById(id).classList.add('view-enter'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    const showSelectionView = () => { activeFormKey = null; renderFormSelectionGrid(); switchView('selection-view'); };
-    const backFromCalculator = () => activeFormKey === 'custom' ? openCustomBuilder() : (FORMS[activeFormKey].direct ? showSelectionView() : showTracksView(activeFormKey));
+    function showSelectionView() { activeFormKey = null; renderFormSelectionGrid(); switchView('selection-view'); }
+    function backFromCalculator() { 
+      if (activeFormKey === 'custom') {
+        openCustomBuilder();
+      } else {
+        FORMS[activeFormKey].direct ? showSelectionView() : showTracksView(activeFormKey);
+      }
+    }
+    window.onload = renderFormSelectionGrid;
   </script>
 </body>
-</html>
+  </html>
