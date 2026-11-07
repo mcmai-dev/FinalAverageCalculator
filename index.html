@@ -40,7 +40,7 @@
   <div class="flare-streak-1"></div>
   <div class="flare-streak-2"></div>
 
-  <!-- Profile Registration Screen Overlay (No Passwords, Unique Usernames Only) -->
+  <!-- Profile Registration Screen Overlay -->
   <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg">
     <div class="w-full max-w-sm z-20">
       <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-4 animate-modal border border-white/20 bg-[#0c0c12]">
@@ -158,9 +158,6 @@
     <div class="flex items-center gap-1.5">
       <button onclick="loadDirectoryModal(true)" title="Profiles Directory" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 transition-all cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-      </button>
-      <button onclick="logoutProfile()" title="Sign Out / Reset Profile" class="w-9 h-9 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-300 transition-all cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
       </button>
     </div>
   </header>
@@ -492,7 +489,6 @@
     }
 
     const closeDirectoryModal = () => { document.getElementById('directory-modal').classList.add('hidden'); document.body.classList.remove('modal-open'); };
-    const logoutProfile = () => { localStorage.clear(); location.reload(); };
 
     const GEN_CATS = [
       { name: "Majors", hoursLabel: "4 credit hours each", hours: 4, subjects: [{ id: "math", name: "Math" }, { id: "english", name: "English" }] },
@@ -1031,4 +1027,3 @@
   </script>
 </body>
 </html>
-
